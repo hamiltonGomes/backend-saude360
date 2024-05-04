@@ -20,9 +20,17 @@ public class Clinic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(unique = true, nullable = false)
     private String cnpj;
+
+    @Column(unique = true, nullable = true)
     private String phoneNumber;
+
+    @Column(unique = true, nullable = false)
     private String cnesNumber;
-    @Embedded
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
     private Address address;
 }
