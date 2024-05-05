@@ -26,10 +26,18 @@ public class Consultation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique = false, nullable = false)
     private LocalDate date;
+
+    @Column(unique = false, nullable = false)
     private ConsultationStatus statusConsultation;
+
+    @Column(unique = false, nullable = false)
     private LocalTime startServiceTime;
+
+    @Column(unique = false, nullable = false)
     private LocalTime endServiceTime;
+
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;

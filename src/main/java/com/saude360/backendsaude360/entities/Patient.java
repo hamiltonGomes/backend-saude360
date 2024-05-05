@@ -39,4 +39,8 @@ public class Patient extends User implements Serializable {
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "responsible_people_id"))
     private List<ResponsiblePerson> responsiblePeople = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Orientation> orientations = new ArrayList<>();
 }
