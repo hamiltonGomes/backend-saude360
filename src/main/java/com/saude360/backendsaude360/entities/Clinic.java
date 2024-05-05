@@ -33,4 +33,8 @@ public class Clinic implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "professional_id")
+    private Professional professional;
 }

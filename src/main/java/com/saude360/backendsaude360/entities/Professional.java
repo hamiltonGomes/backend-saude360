@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -31,4 +34,12 @@ public class Professional extends User implements Serializable {
             joinColumns = @JoinColumn(name = "professional_id"),
             inverseJoinColumns = @JoinColumn(name = "health_sector_id"))
     private Set<HealthSector> healthSectors = new HashSet<>();
+
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Clinic> clinics = new ArrayList<>();
+
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Patient> patients = new ArrayList<>();
 }
