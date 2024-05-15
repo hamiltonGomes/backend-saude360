@@ -1,9 +1,9 @@
 package com.saude360.backendsaude360.enums;
 
 public enum PaymentStatus {
-    PENDING("Pending"),
-    CONCLUDED("Concluded"),
-    LATE("Late");
+    PENDING("Pendente"),
+    CONCLUDED("Concluído"),
+    LATE("Atrasado");
 
     public final String value;
 

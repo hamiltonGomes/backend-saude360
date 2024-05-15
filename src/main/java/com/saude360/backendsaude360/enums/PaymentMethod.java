@@ -2,9 +2,9 @@ package com.saude360.backendsaude360.enums;
 
 public enum PaymentMethod {
     PIX("Pix"),
-    CREDIT_CARD("Credit card"),
-    DEBIT_CARD("Debit card"),
-    CASH("Cash");
+    CREDIT_CARD("Cartão de crédito"),
+    DEBIT_CARD("Cartão de débito"),
+    CASH("Dinheiro");
 
     private final String value;
 

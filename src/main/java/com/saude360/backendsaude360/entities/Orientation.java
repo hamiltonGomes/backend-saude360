@@ -20,15 +20,10 @@ public class Orientation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(unique = false, nullable = true)
     private String description;
-
-    @Column(unique = false, nullable = true)
-    private boolean completed;
-
-    @Column(unique = false, nullable = true)
+    private Boolean completed;
     private List<String> idImages; //check this type with Igor
 
     @ManyToOne

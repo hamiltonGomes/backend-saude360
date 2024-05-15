@@ -23,8 +23,10 @@ public class Patient extends User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Column(unique = false, nullable = true)
     private String comments;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Transaction> transactions;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @JsonIgnore

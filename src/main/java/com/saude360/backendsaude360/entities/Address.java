@@ -19,24 +19,22 @@ public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String cep;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String neighborhood;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String city;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String state;
 
-    @Column(unique = false, nullable = true)
-    private int number;
+    private Integer number;
 
-    @Column(unique = false, nullable = true)
     private String complement;
 
     @OneToOne(mappedBy = "address")

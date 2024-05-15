@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 
 @Entity
 @Table(name = "consultations")
@@ -24,23 +22,28 @@ public class Consultation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(unique = false, nullable = false)
-    private LocalDate date;
+    @Column(nullable = false)
+    private ZonedDateTime date;
 
-    @Column(unique = false, nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ConsultationStatus statusConsultation;
 
-    @Column(unique = false, nullable = false)
-    private LocalTime startServiceTime;
+    @Column(nullable = false)
+    private Instant startServiceTime;
 
-    @Column(unique = false, nullable = false)
-    private LocalTime endServiceTime;
+    @Column(nullable = false)
+    private Instant endServiceTime;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "evolution_history_id")
+    private EvolutionHistory evolutionHistory;
 
     public static Duration calculateDuration(LocalTime startServiceTime, LocalTime endServiceTime) {
         return Duration.between(startServiceTime, endServiceTime);

@@ -1,9 +1,9 @@
 package com.saude360.backendsaude360.enums;
 
 public enum ConsultationStatus {
-    SCHEDULED("Scheduled"),
-    CONCLUDED("Concluded"),
-    CANCELED("Canceled");
+    SCHEDULED("Agendada"),
+    CONCLUDED("Concluída"),
+    CANCELED("Cancelada");
 
 
     private final String value;

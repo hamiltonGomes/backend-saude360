@@ -1,13 +1,13 @@
 package com.saude360.backendsaude360.enums;
 
 public enum Kinship {
-    MOTHER("Mother"),
-    FATHER("Father"),
-    GRANDMOTHER("Grandmother"),
-    GRANDFATHER("Grandfather"),
-    AUNT("Aunt"),
-    UNCLE("Uncle"),
-    OTHER("Other");
+    MOTHER("Mãe"),
+    FATHER("Pai"),
+    GRANDMOTHER("Avó"),
+    GRANDFATHER("Avô"),
+    AUNT("Tia"),
+    UNCLE("Tio"),
+    OTHER("Outro");
 
     private final String value;
 

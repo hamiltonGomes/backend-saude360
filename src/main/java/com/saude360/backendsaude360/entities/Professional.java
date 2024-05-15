@@ -29,6 +29,9 @@ public class Professional extends User implements Serializable {
     @Column(unique = true, nullable = false)
     private String cnsNumber;
 
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    private List<Transaction> transactions;
+
     @ManyToMany
     @JoinTable(name = "professional_health_sectors",
             joinColumns = @JoinColumn(name = "professional_id"),

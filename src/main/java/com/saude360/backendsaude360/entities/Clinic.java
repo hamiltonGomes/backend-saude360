@@ -19,12 +19,12 @@ public class Clinic implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String cnpj;
 
-    @Column(unique = true, nullable = true)
+    @Column(unique = true)
     private String phoneNumber;
 
     @Column(unique = true, nullable = false)

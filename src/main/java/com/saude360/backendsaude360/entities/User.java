@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "users")
@@ -22,13 +22,13 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    protected long id;
+    protected Long id;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     protected String fullName;
 
-    @Column(unique = false, nullable = false)
-    protected LocalDate birthDate;
+    @Column(nullable = false)
+    protected ZonedDateTime birthDate;
 
     @Column(unique = true, nullable = false)
     protected String email;
@@ -36,12 +36,11 @@ public class User implements Serializable {
     @Column(unique = true, nullable = false)
     protected String cpf;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     protected String password;
 
-    @Column(unique = false, nullable = true)
-    protected int idProfilePicture;
+    protected Integer idProfilePicture;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
