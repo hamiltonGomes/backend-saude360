@@ -34,6 +34,9 @@ public class User implements Serializable {
     protected String email;
 
     @Column(unique = true, nullable = false)
+    protected String phoneNumber;
+
+    @Column(unique = true, nullable = false)
     protected String cpf;
 
     @Column(nullable = false)

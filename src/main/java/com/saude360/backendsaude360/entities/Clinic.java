@@ -27,6 +27,9 @@ public class Clinic implements Serializable {
     @Column(unique = true)
     private String phoneNumber;
 
+    @Column(unique = true)
+    private String telephoneNumber;
+
     @Column(unique = true, nullable = false)
     private String cnesNumber;
 

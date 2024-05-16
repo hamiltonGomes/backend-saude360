@@ -25,5 +25,7 @@ public class EvolutionHistory implements Serializable {
     @JsonIgnore
     private Consultation consultation;
 
-    private String description;
+    private String sessionResume;
+
+    private String nextSteps;
 }

@@ -26,7 +26,7 @@ public class Patient extends User implements Serializable {
     private String comments;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    private List<Income> incomes;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @JsonIgnore

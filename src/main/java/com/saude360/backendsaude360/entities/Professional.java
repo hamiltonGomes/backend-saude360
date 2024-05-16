@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "professionals")
@@ -30,7 +29,10 @@ public class Professional extends User implements Serializable {
     private String cnsNumber;
 
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    private List<Expense> expenses;
+
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    private List<Income> incomes;
 
     @ManyToMany
     @JoinTable(name = "professional_health_sectors",
