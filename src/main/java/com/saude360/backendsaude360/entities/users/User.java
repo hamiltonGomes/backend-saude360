@@ -1,6 +1,7 @@
-package com.saude360.backendsaude360.entities;
+package com.saude360.backendsaude360.entities.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.saude360.backendsaude360.entities.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -28,7 +29,7 @@ public class User implements Serializable {
     protected String fullName;
 
     @Column(nullable = false)
-    protected ZonedDateTime birthDate;
+    protected LocalDate birthDate;
 
     @Column(unique = true, nullable = false)
     protected String email;

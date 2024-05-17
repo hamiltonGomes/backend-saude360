@@ -1,6 +1,9 @@
-package com.saude360.backendsaude360.entities;
+package com.saude360.backendsaude360.entities.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.saude360.backendsaude360.entities.Clinic;
+import com.saude360.backendsaude360.entities.HealthSector;
+import com.saude360.backendsaude360.entities.transactions.ProfessionalTransaction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,10 +32,7 @@ public class Professional extends User implements Serializable {
     private String cnsNumber;
 
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
-    private List<Expense> expenses;
-
-    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
-    private List<Income> incomes;
+    private List<ProfessionalTransaction> professionalTransactions;
 
     @ManyToMany
     @JoinTable(name = "professional_health_sectors",

@@ -1,6 +1,9 @@
-package com.saude360.backendsaude360.entities;
+package com.saude360.backendsaude360.entities.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.saude360.backendsaude360.entities.Consultation;
+import com.saude360.backendsaude360.entities.Orientation;
+import com.saude360.backendsaude360.entities.transactions.PatientTransaction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,12 +29,12 @@ public class Patient extends User implements Serializable {
     private String comments;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Income> incomes;
+    private List<PatientTransaction> patientTransactions;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Consultation> consultations = new ArrayList<>();
-
+    // FIXME: change to many to many
     @ManyToOne
     @JoinColumn(name = "professional_id")
     private Professional professional;

@@ -1,5 +1,6 @@
-package com.saude360.backendsaude360.entities;
+package com.saude360.backendsaude360.entities.transactions;
 
+import com.saude360.backendsaude360.entities.users.Patient;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -14,13 +15,13 @@ import java.io.Serializable;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue(value = "E")
+@DiscriminatorValue(value = "I")
 @EqualsAndHashCode(callSuper = true)
-public class Expense extends Transaction implements Serializable {
+public class PatientTransaction extends Transaction implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
-    @JoinColumn(name = "professional_id")
-    private Professional professional;
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 }

@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.entities;
 
+import com.saude360.backendsaude360.entities.users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,13 +26,16 @@ public class Address implements Serializable {
     private String cep;
 
     @Column(nullable = false)
-    private String neighborhood;
+    private String state;
 
     @Column(nullable = false)
     private String city;
 
     @Column(nullable = false)
-    private String state;
+    private String neighborhood;
+
+    @Column(nullable = false)
+    private String street;
 
     private Integer number;
 

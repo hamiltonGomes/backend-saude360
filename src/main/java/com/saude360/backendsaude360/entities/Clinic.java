@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.entities;
 
+import com.saude360.backendsaude360.entities.users.Professional;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

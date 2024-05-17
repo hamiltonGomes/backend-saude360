@@ -1,4 +1,4 @@
-package com.saude360.backendsaude360.entities;
+package com.saude360.backendsaude360.entities.transactions;
 
 import com.saude360.backendsaude360.enums.PaymentMethod;
 import com.saude360.backendsaude360.enums.PaymentStatus;

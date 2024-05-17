@@ -1,4 +1,4 @@
-package com.saude360.backendsaude360.entities;
+package com.saude360.backendsaude360.entities.users;
 
 import com.saude360.backendsaude360.enums.Kinship;
 import jakarta.persistence.*;

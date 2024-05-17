@@ -1,9 +1,9 @@
 package com.saude360.backendsaude360.services;
 
-import com.saude360.backendsaude360.entities.User;
+import com.saude360.backendsaude360.entities.users.User;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
-import com.saude360.backendsaude360.repositories.UserRepository;
+import com.saude360.backendsaude360.repositories.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -28,7 +28,7 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new ObjectNotFoundException("User id: " + id + " not found."));
+        return user.orElseThrow(() -> new ObjectNotFoundException("User with ID: " + id + " was not found."));
     }
 
     public List<User> findAll() {
@@ -39,7 +39,7 @@ public class UserService {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ObjectNotFoundException("User id: " + id + " not found.");
+            throw new ObjectNotFoundException("User with ID: " + id + " was not found.");
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }

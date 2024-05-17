@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
 
+import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.enums.ConsultationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
