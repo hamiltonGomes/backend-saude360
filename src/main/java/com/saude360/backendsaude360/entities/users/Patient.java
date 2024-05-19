@@ -1,6 +1,8 @@
 package com.saude360.backendsaude360.entities.users;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.saude360.backendsaude360.dtos.PatientDto;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.Orientation;
 import com.saude360.backendsaude360.entities.transactions.PatientTransaction;
@@ -10,8 +12,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,30 +22,35 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @PrimaryKeyJoinColumn(name = "user_id")
-public class Patient extends User implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    private String comments;
+public class Patient extends User {
+    private List<String> comments;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<PatientTransaction> patientTransactions;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Consultation> consultations = new ArrayList<>();
-    // FIXME: change to many to many
-    @ManyToOne
-    @JoinColumn(name = "professional_id")
-    private Professional professional;
+
+    @ManyToMany(mappedBy = "patients")
+    @JsonIgnore
+    private List<Professional> professionals;
 
     @ManyToMany
     @JoinTable(name = "patients_responsible_persons",
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "responsible_people_id"))
+    @JsonIgnore
     private List<ResponsiblePerson> responsiblePeople = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Orientation> orientations = new ArrayList<>();
+
+    public Patient(PatientDto patientDto) {
+        super(
+                patientDto.fullName(), patientDto.birthDate(), patientDto.email(), patientDto.phoneNumber(), patientDto.cpf(), patientDto.password(), patientDto.idProfilePicture(), patientDto.address()
+        );
+    }
 }

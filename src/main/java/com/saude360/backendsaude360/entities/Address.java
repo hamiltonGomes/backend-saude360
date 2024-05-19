@@ -1,5 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.saude360.backendsaude360.dtos.AddressDto;
 import com.saude360.backendsaude360.entities.users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -42,8 +44,20 @@ public class Address implements Serializable {
     private String complement;
 
     @OneToOne(mappedBy = "address")
+    @JsonBackReference
     private User user;
 
     @OneToOne(mappedBy = "address")
+    @JsonBackReference
     private Clinic clinic;
+
+    public Address(AddressDto addressDto) {
+        this.cep = addressDto.cep();
+        this.state = addressDto.state();
+        this.city = addressDto.city();
+        this.neighborhood = addressDto.neighborhood();
+        this.street = addressDto.street();
+        this.number = addressDto.number();
+        this.complement = addressDto.complement();
+    }
 }

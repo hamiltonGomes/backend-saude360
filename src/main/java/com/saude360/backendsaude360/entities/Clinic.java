@@ -1,5 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.entities.users.Professional;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,9 +38,11 @@ public class Clinic implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
+    @JsonManagedReference
     private Address address;
 
     @ManyToOne
     @JoinColumn(name = "professional_id")
+    @JsonBackReference
     private Professional professional;
 }

@@ -1,6 +1,8 @@
 package com.saude360.backendsaude360.entities.users;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.saude360.backendsaude360.dtos.AddressDto;
 import com.saude360.backendsaude360.entities.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -48,5 +50,17 @@ public class User implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
+    @JsonManagedReference
     protected Address address;
+
+    public User(String fullName, LocalDate birthDate, String email, String phoneNumber, String cpf, String password, Integer idProfilePicture, AddressDto addressDto) {
+        this.fullName = fullName;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.cpf = cpf;
+        this.password = password;
+        this.idProfilePicture = idProfilePicture;
+        this.address = new Address(addressDto);
+    }
 }
