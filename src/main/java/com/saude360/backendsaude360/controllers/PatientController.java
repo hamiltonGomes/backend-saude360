@@ -2,10 +2,12 @@ package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.PatientDto;
 import com.saude360.backendsaude360.entities.users.Patient;
+import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.services.AddressService;
 import com.saude360.backendsaude360.services.PatientService;
+import com.saude360.backendsaude360.services.ProfessionalService;
 import com.saude360.backendsaude360.services.UserService;
 import com.saude360.backendsaude360.utils.BCryptPassword;
 import jakarta.transaction.Transactional;
@@ -24,20 +26,24 @@ public class PatientController {
     private final PatientService patientService;
     private final UserService userService;
     private final AddressService addressService;
+    private final ProfessionalService professionalService;
 
-    public PatientController(PatientService patientService, UserService userService, AddressService addressService) {
+    public PatientController(PatientService patientService, UserService userService, AddressService addressService, ProfessionalService professionalService) {
         this.patientService = patientService;
-        this.userService = userService;
+        this.professionalService = professionalService;
         this.addressService = addressService;
+        this.userService = userService;
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/{id}")
     @Transactional
-    public ResponseEntity<User> createPatient(@RequestBody @Valid PatientDto patientDto) {
+    public ResponseEntity<User> createPatient(@PathVariable Long id, @RequestBody @Valid PatientDto patientDto) {
         try {
-            Patient patient = new Patient(patientDto);
+            Professional professional = professionalService.findById(id);
+            Patient patient = new Patient(patientDto, professional);
             patient.setPassword(BCryptPassword.encryptPassword(patient));
-            var newPatient = userService.create(patient);
+
+            User newPatient = userService.create(patient);
 
             var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                     .buildAndExpand(newPatient.getId()).toUri();
@@ -47,10 +53,10 @@ public class PatientController {
         }
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{professionalId}/{patientId}")
     @Transactional
-    public ResponseEntity<Optional<Patient>> updatePatient(@PathVariable Long id, @RequestBody @Valid PatientDto patientDto) {
-        Optional<Patient> patientUpdated = patientService.update(id, patientDto);
+    public ResponseEntity<Optional<Patient>> updatePatient(@PathVariable Long professionalId, @PathVariable Long patientId, @RequestBody @Valid PatientDto patientDto) {
+        Optional<Patient> patientUpdated = patientService.update(patientId, patientDto);
         if (patientUpdated.isPresent() && patientDto.address() != null) {
             addressService.update(patientUpdated.get().getAddress().getId(), patientDto.address());
         }

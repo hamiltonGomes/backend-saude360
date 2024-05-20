@@ -27,15 +27,11 @@ public class Patient extends User {
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<PatientTransaction> patientTransactions;
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Consultation> consultations = new ArrayList<>();
+    private List<PatientTransaction> patientTransactions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "patients")
     @JsonIgnore
-    private List<Professional> professionals;
+    private List<Professional> professionals = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "patients_responsible_persons",
@@ -46,11 +42,17 @@ public class Patient extends User {
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @JsonIgnore
+    private List<Consultation> consultations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Orientation> orientations = new ArrayList<>();
 
-    public Patient(PatientDto patientDto) {
+    public Patient(PatientDto patientDto, Professional professional) {
         super(
                 patientDto.fullName(), patientDto.birthDate(), patientDto.email(), patientDto.phoneNumber(), patientDto.cpf(), patientDto.password(), patientDto.idProfilePicture(), patientDto.address()
         );
+        this.professionals.add(professional);
+        professional.addPatient(this);
     }
 }
