@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "health_sectors")
@@ -28,7 +28,7 @@ public class HealthSector implements Serializable {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "healthSectors")
-    private Set<Professional> professionals = new HashSet<>();
+    @JsonIgnore
+    private List<Professional> professionals = new ArrayList<>();
 }

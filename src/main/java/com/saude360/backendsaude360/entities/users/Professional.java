@@ -1,7 +1,8 @@
 package com.saude360.backendsaude360.entities.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.saude360.backendsaude360.dtos.ProfessionalDto;
 import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.entities.HealthSector;
 import com.saude360.backendsaude360.entities.transactions.ProfessionalTransaction;
@@ -12,9 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -28,16 +27,19 @@ public class Professional extends User {
     private String cnsNumber;
 
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
-    private List<ProfessionalTransaction> professionalTransactions;
+    @JsonBackReference
+    private List<ProfessionalTransaction> professionalTransactions = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "professional_health_sectors",
             joinColumns = @JoinColumn(name = "professional_id"),
             inverseJoinColumns = @JoinColumn(name = "health_sector_id"))
-    private Set<HealthSector> healthSectors = new HashSet<>();
+    private List<HealthSector> healthSectors = new ArrayList<>();
 
-    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "professionals_clinics",
+            joinColumns = @JoinColumn(name = "professional_id"),
+            inverseJoinColumns = @JoinColumn(name = "clinic_id"))
     @JsonManagedReference
     private List<Clinic> clinics = new ArrayList<>();
 
@@ -46,4 +48,15 @@ public class Professional extends User {
             joinColumns = @JoinColumn(name = "professional_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private List<Patient> patients = new ArrayList<>();
+
+    public Professional(ProfessionalDto professionalDto) {
+        super(
+                professionalDto.fullName(), professionalDto.birthDate(), professionalDto.email(), professionalDto.phoneNumber(), professionalDto.cpf(), professionalDto.password(), professionalDto.idProfilePicture(), professionalDto.address()
+        );
+        this.cnsNumber = professionalDto.cnsNumber();
+    }
+
+    public void addPatient(Patient patient) {
+        this.patients.add(patient);
+    }
 }

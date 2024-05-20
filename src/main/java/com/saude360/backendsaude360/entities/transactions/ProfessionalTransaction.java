@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.entities.transactions;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.entities.users.Professional;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -23,5 +24,6 @@ public class ProfessionalTransaction extends Transaction implements Serializable
 
     @ManyToOne
     @JoinColumn(name = "professional_id")
+    @JsonManagedReference
     private Professional professional;
 }
