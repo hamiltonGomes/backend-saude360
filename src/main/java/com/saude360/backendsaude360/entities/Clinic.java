@@ -2,6 +2,7 @@ package com.saude360.backendsaude360.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.saude360.backendsaude360.dtos.ClinicDto;
 import com.saude360.backendsaude360.entities.users.Professional;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "clinics")
@@ -41,8 +44,15 @@ public class Clinic implements Serializable {
     @JsonManagedReference
     private Address address;
 
-    @ManyToOne
-    @JoinColumn(name = "professional_id")
+    @ManyToMany(mappedBy = "clinics")
     @JsonBackReference
-    private Professional professional;
+    private List<Professional> professionals = new ArrayList<>();
+
+    public Clinic(ClinicDto clinicDto) {
+        this.cnesNumber = clinicDto.cnesNumber();
+        this.cnpj = clinicDto.cnpj();
+        this.phoneNumber = clinicDto.phoneNumber();
+        this.telephoneNumber = clinicDto.telephoneNumber();
+        this.address = new Address(clinicDto.addressdto());
+    }
 }
