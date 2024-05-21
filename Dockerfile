@@ -1,13 +1,9 @@
-FROM openjdk:21-jdk
-
-RUN mkdir /app
+FROM maven:3.9.6-eclipse-temurin-21-jammy as build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -X -DskipTests
 
-ARG JAR_FILE=target/*.jar
-
-COPY ${JAR_FILE} /app/application.jar
-EXPOSE 8080
-
-RUN chown -R 1001:1001 /app
-
-ENTRYPOINT java -jar /app/application.jar
+FROM openjdk:21-jdk
+WORKDIR /app
+COPY --from=build ./app/target/*.jar ./backend-saude360*.jar
+ENTRYPOINT java -jar backend-saude360*.jar
