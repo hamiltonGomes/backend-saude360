@@ -55,4 +55,14 @@ public class Clinic implements Serializable {
         this.telephoneNumber = clinicDto.telephoneNumber();
         this.address = new Address(clinicDto.addressdto());
     }
+
+    public void addProfessional(Professional professional) {
+        this.professionals.add(professional);
+        professional.getClinics().add(this);
+    }
+
+    public void removeProfessional(Professional professional) {
+        this.professionals.remove(professional);
+        professional.getClinics().remove(this);
+    }
 }

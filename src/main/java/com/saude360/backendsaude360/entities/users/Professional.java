@@ -59,4 +59,14 @@ public class Professional extends User {
     public void addPatient(Patient patient) {
         this.patients.add(patient);
     }
+
+    public void addClinic(Clinic clinic) {
+        this.clinics.add(clinic);
+        clinic.getProfessionals().add(this);
+    }
+
+    public void removeClinic(Clinic clinic) {
+        this.clinics.remove(clinic);
+        clinic.getProfessionals().remove(this);
+    }
 }
