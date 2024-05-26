@@ -14,20 +14,26 @@ import java.util.Optional;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final AddressService addressService;
+    private static final String NOT_FOUND_MESSAGE = "Patient with id %s not found";
 
     @Autowired
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, AddressService addressService) {
         this.patientRepository = patientRepository;
+        this.addressService = addressService;
     }
 
-    public Optional<Patient> update(Long id, PatientDto patientDto) {
-        Optional<Patient> optionalPatient = patientRepository.findById(id);
+    public Optional<Patient> update(Long patientId, PatientDto patientDto) {
+        Optional<Patient> optionalPatient = patientRepository.findById(patientId);
         if (optionalPatient.isPresent()) {
             Patient patient = optionalPatient.get();
-            BeanUtils.copyProperties(patientDto, patient);
+            BeanUtils.copyProperties(patientDto, patient, "professionals");
+            if (patientDto.address() != null) {
+                addressService.update(patient.getAddress().getId(), patientDto.address());
+            }
             return Optional.of(patientRepository.save(patient));
         } else {
-            throw new ObjectNotFoundException("Patient with ID: " + id + " was not found.");
+            throw new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, patientId));
         }
     }
 }
