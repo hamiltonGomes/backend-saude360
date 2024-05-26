@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HealthSectorRepository extends JpaRepository<HealthSector, Long> {
+    HealthSector findByName(String name);
+
+    boolean existsByName(String name);
 }

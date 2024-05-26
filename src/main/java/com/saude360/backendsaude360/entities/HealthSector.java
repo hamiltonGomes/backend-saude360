@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.saude360.backendsaude360.dtos.HealthSectorDto;
 import com.saude360.backendsaude360.entities.users.Professional;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,4 +32,18 @@ public class HealthSector implements Serializable {
     @ManyToMany(mappedBy = "healthSectors")
     @JsonIgnore
     private List<Professional> professionals = new ArrayList<>();
+
+    public HealthSector(HealthSectorDto healthSectorDto) {
+        this.name = healthSectorDto.name();
+    }
+
+    public void addProfessional(Professional professional) {
+        this.professionals.add(professional);
+        professional.getHealthSectors().add(this);
+    }
+
+    public void removeProfessional(Professional professional) {
+        this.professionals.remove(professional);
+        professional.getHealthSectors().remove(this);
+    }
 }
