@@ -30,9 +30,9 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login")
     public ResponseEntity login(@RequestBody @Valid UserAuthenticationDto userAuthenticationDto) {
-        var usuarioEmailSenha = new UsernamePasswordAuthenticationToken(userAuthenticationDto.email(), userAuthenticationDto.password());
+        var usuarioEmailSenha = new UsernamePasswordAuthenticationToken(userAuthenticationDto.cpf(), userAuthenticationDto.password());
         var auth = authenticationManager.authenticate(usuarioEmailSenha);
         var token = jwtToken.generateToken((UserDetailsSecurity) auth.getPrincipal());
-        return ResponseEntity.ok(new LoginTokenResponseDto(userAuthenticationDto.email(), token));
+        return ResponseEntity.ok(new LoginTokenResponseDto(userAuthenticationDto.cpf(), token));
     }
 }

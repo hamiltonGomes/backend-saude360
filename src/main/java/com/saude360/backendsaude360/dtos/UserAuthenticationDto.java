@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UserAuthenticationDto(
         @NotBlank
-        @Email
-        String email,
+        String cpf,
         @NotBlank
         String password
 ) {

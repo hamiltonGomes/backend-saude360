@@ -29,7 +29,7 @@ public class UserDetailsSecurity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.orElse(new User()).getEmail();
+        return user.orElse(new User()).getCpf();
     }
 
     @Override
