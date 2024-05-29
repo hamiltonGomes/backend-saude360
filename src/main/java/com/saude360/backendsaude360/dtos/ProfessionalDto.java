@@ -29,8 +29,8 @@ public record ProfessionalDto(
         AddressDto address,
         @NotBlank
         String cnsNumber,
-//        @NotEmpty
-        List<Long> healthSectorsId,
+        @NotEmpty
+        List<String> healthSectorsNames,
         List<Long> clinicsId
 ) {
 }

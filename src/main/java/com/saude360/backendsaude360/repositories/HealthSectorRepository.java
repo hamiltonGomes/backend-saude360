@@ -4,9 +4,10 @@ import com.saude360.backendsaude360.entities.HealthSector;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface HealthSectorRepository extends JpaRepository<HealthSector, Long> {
-    HealthSector findByName(String name);
-
+    Optional<HealthSector> findByName(String name);
     boolean existsByName(String name);
 }

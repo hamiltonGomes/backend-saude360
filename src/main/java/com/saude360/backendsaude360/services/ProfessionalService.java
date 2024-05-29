@@ -9,6 +9,7 @@ import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.repositories.ClinicRepository;
 import com.saude360.backendsaude360.repositories.HealthSectorRepository;
 import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,20 +36,20 @@ public class ProfessionalService {
 
     public Professional create(ProfessionalDto professionalDto) {
         Professional professional = new Professional(professionalDto);
-        addHealthSectorsToProfessional(professional, professionalDto.healthSectorsId());
+        addHealthSectorsToProfessional(professional, professionalDto.healthSectorsNames());
         addClinicsToProfessional(professional, professionalDto.clinicsId());
         return professionalRepository.save(professional);
     }
 
-    private void addHealthSectorsToProfessional(Professional professional, List<Long> healthSectorIds) {
-        for (Long healthSectorId : healthSectorIds) {
-            HealthSector healthSector = healthSectorRepository.findById(healthSectorId)
-                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Health Sector with ID: %d was not found.", healthSectorId)));
+    private void addHealthSectorsToProfessional(Professional professional, @NotEmpty List<String> healthSectorNames) {
+        for (String healthSectorName : healthSectorNames) {
+            HealthSector healthSector = healthSectorRepository.findByName(healthSectorName)
+                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Health Sector with name: %s was not found.", healthSectorName)));
             if (!professional.getHealthSectors().contains(healthSector)) {
                 professional.getHealthSectors().add(healthSector);
                 healthSector.getProfessionals().add(professional);
             } else {
-                throw new IllegalArgumentException(String.format("Health Sector with ID: %d was not found.", healthSectorId));
+                throw new IllegalArgumentException(String.format("Health Sector with name: %s is already added to the professional.", healthSectorName));
             }
         }
     }
