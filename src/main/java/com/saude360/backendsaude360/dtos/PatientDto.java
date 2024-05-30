@@ -23,10 +23,11 @@ public record PatientDto(
                 "(dd)9xxxx-xxxx (Numbers only). It should contain 11 digits (DDD, 9 in front, and the number itself).")
         String phoneNumber,
         @NotBlank
-        @Pattern(regexp = "^(?=.*[A-Z])[0-9A-Za-z]{8}$", message = "The string must contain exactly 8 alphanumeric characters with at least one uppercase letter.")
+        @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)[0-9A-Za-z]{1,16}$",
+                message = "The string must contain exactly 16 alphanumeric characters with at least one uppercase letter.")
         String password,
-        Integer idProfilePicture,
+        String idProfilePicture,
         @Valid
         AddressDto address
-        ) {
+) {
 }

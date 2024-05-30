@@ -41,7 +41,7 @@ public class JWTToken {
 
         try {
             return JWT.require(algorithm)
-                    .withIssuer("api-renovo")
+                    .withIssuer("api-saude360")
                     .build()
                     .verify(token)
                     .getSubject();

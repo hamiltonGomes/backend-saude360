@@ -46,14 +46,14 @@ public class User implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     protected String password;
 
-    protected Integer idProfilePicture;
+    protected String idProfilePicture;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     @JsonManagedReference
     protected Address address;
 
-    public User(String fullName, LocalDate birthDate, String email, String phoneNumber, String cpf, String password, Integer idProfilePicture, AddressDto addressDto) {
+    public User(String fullName, LocalDate birthDate, String email, String phoneNumber, String cpf, String password, String idProfilePicture, AddressDto addressDto) {
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.email = email;
