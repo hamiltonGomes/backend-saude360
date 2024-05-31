@@ -1,5 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.saude360.backendsaude360.dtos.OrientationDto;
 import com.saude360.backendsaude360.entities.users.Patient;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,12 +26,18 @@ public class Orientation implements Serializable {
     private Long id;
 
     private String description;
-    private Boolean completed;
-    private List<String> idImages; //check this type with Igor
+    private Boolean completed = false;
+    private List<String> idImages;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    public Orientation(OrientationDto orientationDto) {
+        this.description = orientationDto.description();
+        this.completed = orientationDto.completed();
+    }
 
     public boolean addImage(String idImage) {
         return idImages.add(idImage);

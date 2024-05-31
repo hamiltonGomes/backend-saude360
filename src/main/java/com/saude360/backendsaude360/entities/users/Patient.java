@@ -45,7 +45,6 @@ public class Patient extends User {
     private List<Consultation> consultations = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Orientation> orientations = new ArrayList<>();
 
     public Patient(PatientDto patientDto, Professional professional) {

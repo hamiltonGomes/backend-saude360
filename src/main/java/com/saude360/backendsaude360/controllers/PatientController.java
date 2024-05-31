@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +35,7 @@ public class PatientController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/{professionalId}/")
+    @PostMapping(value = "professional/{professionalId}")
     @Transactional
     public ResponseEntity<User> createPatient(@PathVariable Long professionalId, @RequestBody @Valid PatientDto patientDto) {
         try {
@@ -43,7 +44,6 @@ public class PatientController {
             patient.setPassword(BCryptPassword.encryptPassword(patient));
 
             User newPatient = userService.create(patient);
-
             var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{patientId}")
                     .buildAndExpand(newPatient.getId()).toUri();
             return ResponseEntity.created(uri).body(newPatient);
@@ -58,4 +58,17 @@ public class PatientController {
         Optional<Patient> patientUpdated = patientService.update(id, patientDto);
         return ResponseEntity.ok().body(patientUpdated);
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Patient> findPatientById(@PathVariable Long id) {
+        var patient = patientService.findById(id);
+        return ResponseEntity.ok().body(patient);
+    }
+
+    @GetMapping(value = "/")
+    public ResponseEntity<List<Patient>> findAllPatients() {
+        var patients = patientService.findAll();
+        return ResponseEntity.ok().body(patients);
+    }
+
 }

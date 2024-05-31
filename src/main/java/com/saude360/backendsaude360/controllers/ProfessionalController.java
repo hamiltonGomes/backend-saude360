@@ -69,9 +69,4 @@ public class ProfessionalController {
         return ResponseEntity.ok().body(professionals);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Professional> deleteProfessionalById(@PathVariable Long id) {
-        professionalService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 }

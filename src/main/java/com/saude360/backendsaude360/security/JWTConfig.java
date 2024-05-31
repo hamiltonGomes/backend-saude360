@@ -37,7 +37,7 @@ public class JWTConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/user/professional/").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user/patient/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/patient/professional/").permitAll() // essa autorização não está funcionando
                         .requestMatchers(HttpMethod.POST, "/healthSector/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/authentication/login").permitAll()
                         .anyRequest()
