@@ -71,4 +71,9 @@ public class HealthSectorService {
         healthSector.setName(healthSectorDto.name());
         return Optional.of(healthSectorRepository.save(healthSector));
     }
+
+    public HealthSector findByName(String name) {
+        return healthSectorRepository.findByName(name)
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Health Sector with name: %s was not found.", name)));
+    }
 }

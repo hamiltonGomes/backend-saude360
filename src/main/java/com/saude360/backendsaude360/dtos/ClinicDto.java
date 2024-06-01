@@ -16,8 +16,7 @@ public record ClinicDto(
         @NotBlank
         String cnesNumber,
         @Valid
-        AddressDto addressdto,
-        @NotEmpty
+        AddressDto address,
         List<Long> professionalIds
 ) {
 }

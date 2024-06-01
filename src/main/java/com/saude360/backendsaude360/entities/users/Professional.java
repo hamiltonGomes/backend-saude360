@@ -36,7 +36,7 @@ public class Professional extends User {
             inverseJoinColumns = @JoinColumn(name = "health_sector_id"))
     private List<HealthSector> healthSectors = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "professionals_clinics",
             joinColumns = @JoinColumn(name = "professional_id"),
             inverseJoinColumns = @JoinColumn(name = "clinic_id"))
@@ -49,11 +49,21 @@ public class Professional extends User {
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private List<Patient> patients = new ArrayList<>();
 
-    public Professional(ProfessionalDto professionalDto) {
+    public Professional(ProfessionalDto professionalDto, List<HealthSector> healthSectors, List<Clinic> clinics) {
         super(
-                professionalDto.fullName(), professionalDto.birthDate(), professionalDto.email(), professionalDto.phoneNumber(), professionalDto.cpf(), professionalDto.password(), professionalDto.idProfilePicture(), professionalDto.address()
+                professionalDto.fullName(), professionalDto.birthDate(), professionalDto.email(), professionalDto.phoneNumber(), professionalDto.cpf(), professionalDto.password(), professionalDto.idProfilePicture()
         );
         this.cnsNumber = professionalDto.cnsNumber();
+        this.healthSectors = healthSectors;
+        this.clinics = clinics;
+    }
+
+    public Professional(ProfessionalDto professionalDto, List<HealthSector> healthSectors) {
+        super(
+                professionalDto.fullName(), professionalDto.birthDate(), professionalDto.email(), professionalDto.phoneNumber(), professionalDto.cpf(), professionalDto.password(), professionalDto.idProfilePicture()
+        );
+        this.cnsNumber = professionalDto.cnsNumber();
+        this.healthSectors = healthSectors;
     }
 
     public void addPatient(Patient patient) {

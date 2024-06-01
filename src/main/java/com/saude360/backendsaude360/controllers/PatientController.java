@@ -1,6 +1,8 @@
 package com.saude360.backendsaude360.controllers;
 
+import com.saude360.backendsaude360.dtos.AddressDto;
 import com.saude360.backendsaude360.dtos.PatientDto;
+import com.saude360.backendsaude360.entities.Address;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
@@ -40,7 +42,8 @@ public class PatientController {
     public ResponseEntity<User> createPatient(@PathVariable Long professionalId, @RequestBody @Valid PatientDto patientDto) {
         try {
             Professional professional = professionalService.findById(professionalId);
-            Patient patient = new Patient(patientDto, professional);
+            var address = new Address(patientDto.address());
+            Patient patient = new Patient(patientDto, professional, address);
             patient.setPassword(BCryptPassword.encryptPassword(patient));
 
             User newPatient = userService.create(patient);

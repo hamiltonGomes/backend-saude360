@@ -26,12 +26,10 @@ public record ProfessionalDto(
                 message = "The string must contain exactly 16 alphanumeric characters with at least one uppercase letter.")
         String password,
         String idProfilePicture,
-        @Valid
-        AddressDto address,
         @NotBlank
         String cnsNumber,
         @NotEmpty
         List<String> healthSectorsNames,
-        ClinicDto clinic
+        List<ClinicDto> clinic
 ) {
 }

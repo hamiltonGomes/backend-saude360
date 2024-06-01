@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.dtos.ClinicDto;
 import com.saude360.backendsaude360.entities.users.Professional;
@@ -53,7 +54,7 @@ public class Clinic implements Serializable {
         this.cnpj = clinicDto.cnpj();
         this.phoneNumber = clinicDto.phoneNumber();
         this.telephoneNumber = clinicDto.telephoneNumber();
-        this.address = new Address(clinicDto.addressdto());
+        this.address = new Address(clinicDto.address());
     }
 
     public void addProfessional(Professional professional) {

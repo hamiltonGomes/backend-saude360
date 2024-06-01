@@ -48,12 +48,7 @@ public class User implements Serializable {
 
     protected String idProfilePicture;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    @JsonManagedReference
-    protected Address address;
-
-    public User(String fullName, LocalDate birthDate, String email, String phoneNumber, String cpf, String password, String idProfilePicture, AddressDto addressDto) {
+    public User(String fullName, LocalDate birthDate, String email, String phoneNumber, String cpf, String password, String idProfilePicture) {
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.email = email;
@@ -61,6 +56,5 @@ public class User implements Serializable {
         this.cpf = cpf;
         this.password = password;
         this.idProfilePicture = idProfilePicture;
-        this.address = new Address(addressDto);
     }
 }

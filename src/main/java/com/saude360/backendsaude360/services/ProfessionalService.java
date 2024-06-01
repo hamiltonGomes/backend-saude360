@@ -32,10 +32,7 @@ public class ProfessionalService {
         this.healthSectorRepository = healthSectorRepository;
     }
 
-    public Professional create(ProfessionalDto professionalDto) {
-        Professional professional = new Professional(professionalDto);
-        addHealthSectorsToProfessional(professional, professionalDto.healthSectorsNames());
-        addClinicsToProfessional(professional, professionalDto.clinic());
+    public Professional create(Professional professional) {
         return professionalRepository.save(professional);
     }
 

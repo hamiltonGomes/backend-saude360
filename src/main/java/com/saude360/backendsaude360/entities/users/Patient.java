@@ -2,7 +2,10 @@ package com.saude360.backendsaude360.entities.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.saude360.backendsaude360.dtos.AddressDto;
 import com.saude360.backendsaude360.dtos.PatientDto;
+import com.saude360.backendsaude360.entities.Address;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.Orientation;
 import com.saude360.backendsaude360.entities.transactions.PatientTransaction;
@@ -47,11 +50,17 @@ public class Patient extends User {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Orientation> orientations = new ArrayList<>();
 
-    public Patient(PatientDto patientDto, Professional professional) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    @JsonManagedReference
+    protected Address address;
+
+    public Patient(PatientDto patientDto, Professional professional, Address address) {
         super(
-                patientDto.fullName(), patientDto.birthDate(), patientDto.email(), patientDto.phoneNumber(), patientDto.cpf(), patientDto.password(), patientDto.idProfilePicture(), patientDto.address()
+                patientDto.fullName(), patientDto.birthDate(), patientDto.email(), patientDto.phoneNumber(), patientDto.cpf(), patientDto.password(), patientDto.idProfilePicture()
         );
         this.professionals.add(professional);
+        this.address = address;
         professional.addPatient(this);
     }
 }

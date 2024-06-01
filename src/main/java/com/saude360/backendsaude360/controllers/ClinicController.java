@@ -42,8 +42,8 @@ public class ClinicController {
     @Transactional
     public ResponseEntity<Optional<Clinic>> updateClinic(@PathVariable Long id, @RequestBody @Valid ClinicDto clinicDto) {
         Optional<Clinic> clinicUpdated = clinicService.update(id, clinicDto, clinicDto.professionalIds());
-        if (clinicUpdated.isPresent() && clinicDto.addressdto() != null) {
-            addressService.update(clinicUpdated.get().getAddress().getId(), clinicDto.addressdto());
+        if (clinicUpdated.isPresent() && clinicDto.address() != null) {
+            addressService.update(clinicUpdated.get().getAddress().getId(), clinicDto.address());
         }
         return ResponseEntity.ok().body(clinicUpdated);
     }
