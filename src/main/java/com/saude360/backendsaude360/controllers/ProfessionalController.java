@@ -51,7 +51,7 @@ public class ProfessionalController {
             var professional = new Professional(professionalDto, healthSectors);
 
 //            Se existir clínicas, adiciona na lista de clínicas e posteriormente instancia o profissional com a(s) clínica(s)
-            if(professionalDto.clinic() != null) {
+            if(professionalDto.clinic() != null && !professionalDto.clinic().isEmpty()) {
                 List<Clinic> clinics = new ArrayList<>();
                 for(ClinicDto clinic: professionalDto.clinic()) {
                     var obj = new Clinic(clinic);
