@@ -20,7 +20,7 @@ import java.util.Optional;
 public class ClinicService {
     private final ClinicRepository clinicRepository;
     private final ProfessionalRepository professionalRepository;
-    private static final String NOT_FOUND_MESSAGE = "Clinic with ID: %d was not found.";
+    private static final String NOT_FOUND_MESSAGE = "Clínica com ID: %d não foi encontrada.";
 
     @Autowired
     public ClinicService(ClinicRepository clinicRepository, ProfessionalRepository professionalRepository) {
@@ -43,7 +43,7 @@ public class ClinicService {
 
         for (Long professionalId : professionalIds) {
             Professional professional = professionalRepository.findById(professionalId)
-                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Professional with ID: %d was not found.", professionalId)));
+                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Profissional com ID: %d não foi encontrado.", professionalId)));
 
             clinic.addProfessional(professional);
             professionalRepository.save(professional);

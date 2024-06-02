@@ -19,7 +19,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final AddressService addressService;
-    private static final String NOT_FOUND_MESSAGE = "Patient with id %s not found";
+    private static final String NOT_FOUND_MESSAGE = "Paciente com id %s não foi encontrado.F";
 
     @Autowired
     public PatientService(PatientRepository patientRepository, AddressService addressService) {

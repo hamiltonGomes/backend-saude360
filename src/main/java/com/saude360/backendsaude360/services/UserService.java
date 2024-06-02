@@ -28,7 +28,7 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new ObjectNotFoundException("User with ID: " + id + " was not found."));
+        return user.orElseThrow(() -> new ObjectNotFoundException("Usuário com ID: " + id + " não foi encontrado."));
     }
 
     public List<User> findAll() {
@@ -39,7 +39,7 @@ public class UserService {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ObjectNotFoundException("User with ID: " + id + " was not found.");
+            throw new ObjectNotFoundException("Usuário com ID: " + id + " não foi encontrado.");
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }

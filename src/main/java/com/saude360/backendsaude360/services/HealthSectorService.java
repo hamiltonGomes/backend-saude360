@@ -20,7 +20,7 @@ import java.util.Optional;
 public class HealthSectorService {
     private final HealthSectorRepository healthSectorRepository;
     private final ProfessionalRepository professionalRepository;
-    private static final String NOT_FOUND_MESSAGE = "Health Sector with ID: %d was not found.";
+    private static final String NOT_FOUND_MESSAGE = "Setor de Saúde com ID: %d não foi encontrado.";
 
     @Autowired
     public HealthSectorService(HealthSectorRepository healthSectorRepository, ProfessionalRepository professionalRepository) {
@@ -30,12 +30,12 @@ public class HealthSectorService {
 
     public HealthSector create(HealthSectorDto healthSectorDto) {
         if (healthSectorRepository.existsByName(healthSectorDto.name())) {
-            throw new DatabaseException("Health Sector with name: " + healthSectorDto.name() + " already exists.");
+            throw new DatabaseException("Setor de Saúde com nome: " + healthSectorDto.name() + " já existe.");
         }
         HealthSector healthSector = new HealthSector(healthSectorDto);
         if (healthSectorDto.professionalId() != null) {
             Professional professional = professionalRepository.findById(healthSectorDto.professionalId())
-                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Professional with ID: %d was not found.", healthSectorDto.professionalId())));
+                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Profissional com ID: %d não foi encontrado.", healthSectorDto.professionalId())));
             healthSector.addProfessional(professional);
         }
         return healthSectorRepository.save(healthSector);
@@ -66,7 +66,7 @@ public class HealthSectorService {
         HealthSector healthSector = healthSectorRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, id)));
         if (!healthSector.getName().equals(healthSectorDto.name()) && healthSectorRepository.existsByName(healthSectorDto.name())) {
-            throw new DatabaseException("Health Sector with name: " + healthSectorDto.name() + " already exists.");
+            throw new DatabaseException("Setor de Saúde com nome: " + healthSectorDto.name() + " já existe.");
         }
         healthSector.setName(healthSectorDto.name());
         return Optional.of(healthSectorRepository.save(healthSector));
@@ -74,6 +74,6 @@ public class HealthSectorService {
 
     public HealthSector findByName(String name) {
         return healthSectorRepository.findByName(name)
-                .orElseThrow(() -> new ObjectNotFoundException(String.format("Health Sector with name: %s was not found.", name)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Setor de Saúde com nome: %s não foi encontrado.", name)));
     }
 }

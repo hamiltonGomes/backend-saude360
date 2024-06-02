@@ -23,7 +23,7 @@ public class UserDetailsSecurityService implements UserDetailsService {
         Optional<User> user = userRepository.findByCpf(login);
 
         if (user.isEmpty()) {
-            throw new ObjectNotFoundException("User: " + login + " was not found.");
+            throw new ObjectNotFoundException("Usuário: " + login + " não foi encontrado.");
         }
         return new UserDetailsSecurity(user);
     }

@@ -19,7 +19,7 @@ public class AddressService {
 
     public void update(Long id, AddressDto addressDto) {
         Address existingAddress = addressRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Address with ID: " + id + " was not found."));
+                .orElseThrow(() -> new ObjectNotFoundException("Endereço com ID: " + id + " não foi encontrado."));
 
         if (addressDto.cep() != null) {
             existingAddress.setCep(addressDto.cep());

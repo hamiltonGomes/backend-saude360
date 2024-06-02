@@ -17,7 +17,7 @@ import java.util.Optional;
 @Transactional
 public class OrientationService {
     private final OrientationRepository orientationRepository;
-    private static final String NOT_FOUND_MESSAGE = "Orientation with ID: %d was not found.";
+    private static final String NOT_FOUND_MESSAGE = "Orientação com ID: %d não foi encontrada.";
 
     @Autowired
     public OrientationService(OrientationRepository orientationRepository) {

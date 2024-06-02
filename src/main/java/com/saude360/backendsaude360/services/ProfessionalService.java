@@ -24,7 +24,7 @@ public class ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
     private final HealthSectorRepository healthSectorRepository;
-    private static final String NOT_FOUND_MESSAGE = "Professional with ID: %d was not found.";
+    private static final String NOT_FOUND_MESSAGE = "Profissional com ID: %d não foi encontrado.";
 
     @Autowired
     public ProfessionalService(ProfessionalRepository professionalRepository, HealthSectorRepository healthSectorRepository) {
@@ -39,12 +39,12 @@ public class ProfessionalService {
     private void addHealthSectorsToProfessional(Professional professional, @NotEmpty List<String> healthSectorNames) {
         for (String healthSectorName : healthSectorNames) {
             HealthSector healthSector = healthSectorRepository.findByName(healthSectorName)
-                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Health Sector with name: %s was not found.", healthSectorName)));
+                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Setor de Saúde com nome: %s não foi encontrado.", healthSectorName)));
             if (!professional.getHealthSectors().contains(healthSector)) {
                 professional.getHealthSectors().add(healthSector);
                 healthSector.getProfessionals().add(professional);
             } else {
-                throw new IllegalArgumentException(String.format("Health Sector with name: %s is already added to the professional.", healthSectorName));
+                throw new IllegalArgumentException(String.format("Setor de Saúde com nome: %s já foi adicionado ao profissional.", healthSectorName));
             }
         }
     }
@@ -56,7 +56,7 @@ public class ProfessionalService {
                 professional.getClinics().add(clinic);
                 clinic.getProfessionals().add(professional);
             } else {
-                throw new IllegalArgumentException(String.format("Clinic with ID: %d is already added to the professional.", clinic.getId()));
+                throw new IllegalArgumentException(String.format("Clínica com ID: %d já foi adicionada ao profissional.", clinic.getId()));
             }
         }
     }
