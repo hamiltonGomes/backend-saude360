@@ -1,15 +1,10 @@
 package com.saude360.backendsaude360.services;
 
-import com.saude360.backendsaude360.dtos.ClinicDto;
 import com.saude360.backendsaude360.dtos.ProfessionalDto;
-import com.saude360.backendsaude360.entities.Clinic;
-import com.saude360.backendsaude360.entities.HealthSector;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
-import com.saude360.backendsaude360.repositories.HealthSectorRepository;
 import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
-import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,42 +18,15 @@ import java.util.Optional;
 public class ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
-    private final HealthSectorRepository healthSectorRepository;
     private static final String NOT_FOUND_MESSAGE = "Profissional com ID: %d não foi encontrado.";
 
     @Autowired
-    public ProfessionalService(ProfessionalRepository professionalRepository, HealthSectorRepository healthSectorRepository) {
+    public ProfessionalService(ProfessionalRepository professionalRepository) {
         this.professionalRepository = professionalRepository;
-        this.healthSectorRepository = healthSectorRepository;
     }
 
     public Professional create(Professional professional) {
         return professionalRepository.save(professional);
-    }
-
-    private void addHealthSectorsToProfessional(Professional professional, @NotEmpty List<String> healthSectorNames) {
-        for (String healthSectorName : healthSectorNames) {
-            HealthSector healthSector = healthSectorRepository.findByName(healthSectorName)
-                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Setor de Saúde com nome: %s não foi encontrado.", healthSectorName)));
-            if (!professional.getHealthSectors().contains(healthSector)) {
-                professional.getHealthSectors().add(healthSector);
-                healthSector.getProfessionals().add(professional);
-            } else {
-                throw new IllegalArgumentException(String.format("Setor de Saúde com nome: %s já foi adicionado ao profissional.", healthSectorName));
-            }
-        }
-    }
-
-    private void addClinicsToProfessional(Professional professional, ClinicDto clinicDto) {
-        if (clinicDto != null) {
-            Clinic clinic = new Clinic(clinicDto);
-            if (!professional.getClinics().contains(clinic)) {
-                professional.getClinics().add(clinic);
-                clinic.getProfessionals().add(professional);
-            } else {
-                throw new IllegalArgumentException(String.format("Clínica com ID: %d já foi adicionada ao profissional.", clinic.getId()));
-            }
-        }
     }
 
     public Optional<Professional> update(Long id, ProfessionalDto professionalDto) {

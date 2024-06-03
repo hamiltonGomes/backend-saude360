@@ -1,14 +1,12 @@
 package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.ClinicDto;
-import com.saude360.backendsaude360.dtos.HealthSectorDto;
 import com.saude360.backendsaude360.dtos.ProfessionalDto;
 import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.entities.HealthSector;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
-import com.saude360.backendsaude360.services.AddressService;
 import com.saude360.backendsaude360.services.HealthSectorService;
 import com.saude360.backendsaude360.services.ProfessionalService;
 import com.saude360.backendsaude360.services.UserService;

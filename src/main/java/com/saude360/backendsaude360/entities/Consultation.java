@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
 
+import com.saude360.backendsaude360.dtos.ConsultationDto;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.enums.ConsultationStatus;
 import jakarta.persistence.*;
@@ -30,13 +31,13 @@ public class Consultation implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ConsultationStatus statusConsultation;
+    private ConsultationStatus statusConsultation = ConsultationStatus.SCHEDULED;
 
     @Column(nullable = false)
-    private Instant startServiceTime;
+    private Instant startServiceDateAndTime;
 
     @Column(nullable = false)
-    private Instant endServiceTime;
+    private Instant endServiceDateAndTime;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
@@ -46,7 +47,11 @@ public class Consultation implements Serializable {
     @JoinColumn(name = "evolution_history_id")
     private EvolutionHistory evolutionHistory;
 
-    public static Duration calculateDuration(LocalTime startServiceTime, LocalTime endServiceTime) {
-        return Duration.between(startServiceTime, endServiceTime);
+    public Consultation(ConsultationDto consultationDto, Patient patient, EvolutionHistory evolutionHistory) {
+        this.date = consultationDto.date();
+        this.startServiceDateAndTime = consultationDto.startServiceDateAndTime();
+        this.endServiceDateAndTime = consultationDto.endServiceDateAndTime();
+        this.evolutionHistory = evolutionHistory;
+        this.patient = patient;
     }
 }

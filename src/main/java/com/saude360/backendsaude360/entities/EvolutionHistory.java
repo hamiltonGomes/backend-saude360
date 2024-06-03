@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.saude360.backendsaude360.dtos.EvolutionHistoryDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +29,9 @@ public class EvolutionHistory implements Serializable {
     private String sessionResume;
 
     private String nextSteps;
+
+    public EvolutionHistory(EvolutionHistoryDto evolutionHistoryDto) {
+        this.sessionResume = evolutionHistoryDto.sessionResume();
+        this.nextSteps = evolutionHistoryDto.nextSteps();
+    }
 }

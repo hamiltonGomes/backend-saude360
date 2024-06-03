@@ -1,6 +1,5 @@
 package com.saude360.backendsaude360.dtos;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,8 +25,6 @@ public record PatientDto(
         @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)[0-9A-Za-z]{1,16}$",
                 message = "The string must contain exactly 16 alphanumeric characters with at least one uppercase letter.")
         String password,
-        String idProfilePicture,
-        @Valid
-        AddressDto address
+        String idProfilePicture
 ) {
 }
