@@ -18,13 +18,11 @@ import java.util.Optional;
 public class PatientService {
 
     private final PatientRepository patientRepository;
-    private final AddressService addressService;
     private static final String NOT_FOUND_MESSAGE = "Paciente com id %s não foi encontrado.F";
 
     @Autowired
-    public PatientService(PatientRepository patientRepository, AddressService addressService) {
+    public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
-        this.addressService = addressService;
     }
 
     public Optional<Patient> update(Long patientId, PatientDto patientDto) {
@@ -32,9 +30,6 @@ public class PatientService {
         if (optionalPatient.isPresent()) {
             Patient patient = optionalPatient.get();
             BeanUtils.copyProperties(patientDto, patient, "professionals");
-            if (patientDto.address() != null) {
-                addressService.update(patient.getAddress().getId(), patientDto.address());
-            }
             return Optional.of(patientRepository.save(patient));
         } else {
             throw new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, patientId));
