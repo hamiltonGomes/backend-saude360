@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.PatientDto;
+import com.saude360.backendsaude360.dtos.PatientFullDto;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
@@ -68,6 +69,12 @@ public class PatientController {
     @GetMapping(value = "/")
     public ResponseEntity<List<Patient>> findAllPatients() {
         var patients = patientService.findAll();
+        return ResponseEntity.ok().body(patients);
+    }
+
+    @GetMapping(value = "/consultation-and-orientation")
+    public ResponseEntity<List<PatientFullDto>> findPatientLastConsultationAndOrientation() {
+        var patients = patientService.findPatientLastConsultationAndOrientation();
         return ResponseEntity.ok().body(patients);
     }
 
