@@ -1,8 +1,11 @@
 package com.saude360.backendsaude360.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.dtos.ConsultationDto;
 import com.saude360.backendsaude360.entities.users.Patient;
+import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.enums.ConsultationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,15 +46,26 @@ public class Consultation implements Serializable {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @ManyToOne
+    @JoinColumn(name = "professional_id")
+    @JsonManagedReference
+    @JsonIgnore
+    private Professional professional;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "evolution_history_id")
     private EvolutionHistory evolutionHistory;
 
-    public Consultation(ConsultationDto consultationDto, Patient patient, EvolutionHistory evolutionHistory) {
+    private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+
+    private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+
+    public Consultation(ConsultationDto consultationDto, Patient patient, EvolutionHistory evolutionHistory, Professional professional) {
         this.date = consultationDto.date();
         this.startServiceDateAndTime = consultationDto.startServiceDateAndTime();
         this.endServiceDateAndTime = consultationDto.endServiceDateAndTime();
         this.evolutionHistory = evolutionHistory;
         this.patient = patient;
+        this.professional = professional;
     }
 }

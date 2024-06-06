@@ -16,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -45,7 +47,7 @@ public class ConsultationService {
 
         Patient patient = patients.get(0);
         EvolutionHistory evolutionHistory = new EvolutionHistory(consultationDto.evolutionHistory());
-        Consultation consultation = new Consultation(consultationDto, patient, evolutionHistory);
+        Consultation consultation = new Consultation(consultationDto, patient, evolutionHistory, professional);
         return consultationRepository.save(consultation);
     }
 
@@ -90,6 +92,8 @@ public class ConsultationService {
             consultation.setEvolutionHistory(evolutionHistory);
         }
 
+
+        consultation.setUpdatedAt(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
         return consultationRepository.save(consultation);
     }
 

@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -33,6 +35,10 @@ public class Orientation implements Serializable {
     @JsonIgnore
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+
+    private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
 
     public Orientation(OrientationDto orientationDto) {
         this.description = orientationDto.description();

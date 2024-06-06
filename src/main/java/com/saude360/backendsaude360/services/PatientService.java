@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.services;
 
 import com.saude360.backendsaude360.dtos.PatientDto;
+import com.saude360.backendsaude360.dtos.PatientFullDto;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
@@ -9,8 +10,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +59,25 @@ public class PatientService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
+    }
+
+    public List<PatientFullDto> findPatientLastConsultationAndOrientation() {
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        var patients = patientRepository.findPatientsByProfessionalCpf(userDetails.getUsername());
+        if(patients.isEmpty()) {
+            throw new ObjectNotFoundException("Não foi possível encontrar pacientes para o profissional de CPF: " + userDetails.getUsername() + ".");
+        }
+
+        List<PatientFullDto> patientWithConsultations = new ArrayList<>();
+
+        for(Patient patient : patients) {
+            PatientFullDto consultationAndOrientation = patientRepository.findConsultationAndOrientationByPatientId(patient.getId());
+
+            patientWithConsultations.add(consultationAndOrientation);
+        }
+
+        return patientWithConsultations;
     }
 }

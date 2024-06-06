@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.dtos.ProfessionalDto;
 import com.saude360.backendsaude360.entities.Clinic;
+import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.HealthSector;
 import com.saude360.backendsaude360.entities.transactions.ProfessionalTransaction;
 import jakarta.persistence.*;
@@ -42,6 +43,10 @@ public class Professional extends User {
             inverseJoinColumns = @JoinColumn(name = "clinic_id"))
     @JsonManagedReference
     private List<Clinic> clinics = new ArrayList<>();
+
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Consultation> consultations = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "professionals_patients",
