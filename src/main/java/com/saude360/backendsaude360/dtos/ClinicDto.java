@@ -2,7 +2,6 @@ package com.saude360.backendsaude360.dtos;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 

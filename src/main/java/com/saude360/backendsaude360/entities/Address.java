@@ -2,6 +2,7 @@ package com.saude360.backendsaude360.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.saude360.backendsaude360.dtos.AddressDto;
+import com.saude360.backendsaude360.entities.users.Patient;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,6 +46,10 @@ public class Address implements Serializable {
     @OneToOne(mappedBy = "address")
     @JsonBackReference
     private Clinic clinic;
+
+    @OneToOne(mappedBy = "address")
+    @JsonBackReference
+    private Patient patient;
 
     public Address(AddressDto addressDto) {
         this.cep = addressDto.cep();

@@ -6,8 +6,8 @@ import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
+import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
 import com.saude360.backendsaude360.services.PatientService;
-import com.saude360.backendsaude360.services.ProfessionalService;
 import com.saude360.backendsaude360.services.UserService;
 import com.saude360.backendsaude360.utils.BCryptPassword;
 import jakarta.transaction.Transactional;
@@ -15,6 +15,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,20 +29,23 @@ public class PatientController {
 
     private final PatientService patientService;
     private final UserService userService;
-    private final ProfessionalService professionalService;
+    private final ProfessionalRepository professionalRepository;
 
     @Autowired
-    public PatientController(PatientService patientService, UserService userService, ProfessionalService professionalService) {
+    public PatientController(PatientService patientService, UserService userService, ProfessionalRepository professionalRepository) {
         this.patientService = patientService;
-        this.professionalService = professionalService;
+        this.professionalRepository = professionalRepository;
         this.userService = userService;
     }
 
-    @PostMapping(value = "professional/{professionalId}")
+    @PostMapping(value = "/")
     @Transactional
-    public ResponseEntity<User> createPatient(@PathVariable Long professionalId, @RequestBody @Valid PatientDto patientDto) {
+    public ResponseEntity<User> createPatient(@RequestBody @Valid PatientDto patientDto) {
         try {
-            Professional professional = professionalService.findById(professionalId);
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String professionalCpf = userDetails.getUsername();
+            Professional professional = professionalRepository.findByCpf(professionalCpf);
+
             Patient patient = new Patient(patientDto, professional);
             patient.setPassword(BCryptPassword.encryptPassword(patient));
 
