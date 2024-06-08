@@ -9,6 +9,7 @@ import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.enums.ConsultationStatus;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.repositories.ConsultationRepository;
+import com.saude360.backendsaude360.repositories.users.PatientRepository;
 import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,14 @@ import java.util.List;
 public class ConsultationService {
     private final ConsultationRepository consultationRepository;
     private final ProfessionalRepository professionalRepository;
+    private final PatientRepository patientRepository;
     private static final String NOT_FOUND_MESSAGE = "Consulta com ID: %d não foi encontrada.";
 
     @Autowired
-    public ConsultationService(ConsultationRepository consultationRepository, ProfessionalRepository professionalRepository) {
+    public ConsultationService(ConsultationRepository consultationRepository, ProfessionalRepository professionalRepository, PatientRepository patientRepository) {
         this.consultationRepository = consultationRepository;
         this.professionalRepository = professionalRepository;
+        this.patientRepository = patientRepository;
     }
 
     public Consultation create(ConsultationDto consultationDto) {
@@ -39,17 +42,29 @@ public class ConsultationService {
         String professionalCpf = userDetails.getUsername();
         Professional professional = professionalRepository.findByCpf(professionalCpf);
 
-        List<Patient> patients = professional.getPatients();
+        Patient patient = findPatientByName(patientName, professional);
 
-        if (patients.isEmpty()) {
-            throw new ObjectNotFoundException(String.format("Paciente com o nome: %s não foi encontrado para o profissional de CPF: %s.", patientName, professionalCpf));
-        }
-
-        Patient patient = patients.get(0);
         EvolutionHistory evolutionHistory = new EvolutionHistory(consultationDto.evolutionHistory());
         Consultation consultation = new Consultation(consultationDto, patient, evolutionHistory, professional);
         return consultationRepository.save(consultation);
     }
+
+    private Patient findPatientByName(String patientName, Professional professional) {
+        List<Patient> patients = professional.getPatients();
+
+        if (patients.isEmpty()) {
+            throw new ObjectNotFoundException(String.format("Paciente com o nome: %s não foi encontrado para o profissional de CPF: %s.", patientName, professional.getCpf()));
+        }
+
+        for (Patient patient : patients) {
+            if (patient.getFullName().equals(patientName)) {
+                return patient;
+            }
+        }
+
+        throw new ObjectNotFoundException(String.format("Paciente com o nome: %s não foi encontrado para o profissional de CPF: %s.", patientName, professional.getCpf()));
+    }
+
 
     public Consultation update(Long id, ConsultationUpdateDto consultationUpdateDto) {
         Consultation consultation = consultationRepository.findById(id)
@@ -77,13 +92,8 @@ public class ConsultationService {
             String professionalCpf = userDetails.getUsername();
             Professional professional = professionalRepository.findByCpf(professionalCpf);
 
-            List<Patient> patients = professional.getPatients();
+            Patient patient = findPatientByName(consultationUpdateDto.patientName(), professional);
 
-            if (patients.isEmpty()) {
-                throw new ObjectNotFoundException(String.format("Paciente com o nome: %s não foi encontrado para o profissional de CPF: %s.", consultationUpdateDto.patientName(), professionalCpf));
-            }
-
-            Patient patient = patients.get(0);
             consultation.setPatient(patient);
         }
 
@@ -99,6 +109,15 @@ public class ConsultationService {
 
     public List<Consultation> findAll() {
         return consultationRepository.findAll();
+    }
+
+    public List<Consultation> findAllConsultationsByPatientAndProfessional(Long patientId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String professionalCpf = userDetails.getUsername();
+        Professional professional = professionalRepository.findByCpf(professionalCpf);
+        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new ObjectNotFoundException("Patient not found"));
+
+        return consultationRepository.findAllByProfessionalAndPatient(professional, patient);
     }
 
     public Consultation findById(Long id) {

@@ -41,6 +41,12 @@ public class ConsultationController {
         return ResponseEntity.ok().body(consultations);
     }
 
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<Consultation>> findAllConsultationsByPatientAndProfessional(@PathVariable Long patientId) {
+        List<Consultation> consultations = consultationService.findAllConsultationsByPatientAndProfessional(patientId);
+        return ResponseEntity.ok().body(consultations);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Consultation> findById(@PathVariable Long id) {
         Consultation consultation = consultationService.findById(id);
