@@ -85,14 +85,14 @@ public class ConsultationService {
             consultation.setEndServiceDateAndTime(consultationUpdateDto.endServiceDateAndTime());
         }
 
-        if (consultationUpdateDto.patientName() != null) {
-            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String professionalCpf = userDetails.getUsername();
-            Professional professional = professionalRepository.findByCpf(professionalCpf);
-
-            Patient patient = findPatientByName(consultationUpdateDto.patientName(), professional);
-
-            consultation.setPatient(patient);
+        if(consultationUpdateDto.title() != null) {
+            consultation.setTitle(consultationUpdateDto.title());
+        }
+        if(consultationUpdateDto.description() != null) {
+            consultation.setDescription(consultationUpdateDto.description());
+        }
+        if(consultationUpdateDto.color() != null) {
+            consultation.setColor(consultationUpdateDto.color());
         }
 
         if (consultationUpdateDto.evolutionHistory() != null) {
