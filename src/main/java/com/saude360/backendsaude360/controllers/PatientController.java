@@ -83,4 +83,10 @@ public class PatientController {
         return ResponseEntity.ok().body(patients);
     }
 
+    @GetMapping(value = "/professional")
+    public ResponseEntity<List<Patient>> findPatientsByProfessional() {
+        var patients = patientService.findPatientsByProfessionalCpf();
+        return ResponseEntity.ok().body(patients);
+    }
+
 }

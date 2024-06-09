@@ -42,6 +42,15 @@ public class Consultation implements Serializable {
     @Column(nullable = false)
     private Instant endServiceDateAndTime;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private String color;
+
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
@@ -65,6 +74,17 @@ public class Consultation implements Serializable {
         this.startServiceDateAndTime = consultationDto.startServiceDateAndTime();
         this.endServiceDateAndTime = consultationDto.endServiceDateAndTime();
         this.evolutionHistory = evolutionHistory;
+        this.patient = patient;
+        this.professional = professional;
+    }
+
+    public Consultation(ConsultationDto consultationDto, Patient patient, Professional professional) {
+        this.date = consultationDto.date();
+        this.startServiceDateAndTime = consultationDto.startServiceDateAndTime();
+        this.endServiceDateAndTime = consultationDto.endServiceDateAndTime();
+        this.title = consultationDto.title();
+        this.description = consultationDto.description();
+        this.color = consultationDto.color();
         this.patient = patient;
         this.professional = professional;
     }
