@@ -78,4 +78,15 @@ public class PatientService {
 
         return patientWithConsultations;
     }
+
+    public List<Patient> findPatientsByProfessionalCpf() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var patients = patientRepository.findPatientsByProfessionalCpf(userDetails.getUsername());
+
+        if(patients.isEmpty()) {
+            throw new ObjectNotFoundException("Não foi possível encontrar pacientes para o profissional de CPF: " + userDetails.getUsername() + ".");
+        }
+
+        return patients;
+    }
 }

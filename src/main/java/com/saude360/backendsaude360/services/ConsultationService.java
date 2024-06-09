@@ -36,16 +36,14 @@ public class ConsultationService {
         this.patientRepository = patientRepository;
     }
 
-    public Consultation create(ConsultationDto consultationDto) {
-        String patientName = consultationDto.patientName();
+    public Consultation create(ConsultationDto consultationDto, Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String professionalCpf = userDetails.getUsername();
-        Professional professional = professionalRepository.findByCpf(professionalCpf);
+        Professional professional = professionalRepository.findByCpf(userDetails.getUsername());
 
-        Patient patient = findPatientByName(patientName, professional);
+        var patient = patientRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Paciente com o ID " + id + " não foi encontrado."));
 
-        EvolutionHistory evolutionHistory = new EvolutionHistory(consultationDto.evolutionHistory());
-        Consultation consultation = new Consultation(consultationDto, patient, evolutionHistory, professional);
+        Consultation consultation = new Consultation(consultationDto, patient, professional);
+
         return consultationRepository.save(consultation);
     }
 

@@ -21,10 +21,10 @@ public class ConsultationController {
         this.consultationService = consultationService;
     }
 
-    @PostMapping("/")
+    @PostMapping("/{id}")
     @Transactional
-    public ResponseEntity<Consultation> create(@RequestBody @Valid ConsultationDto consultationDto) {
-        Consultation consultation = consultationService.create(consultationDto);
+    public ResponseEntity<Consultation> create(@PathVariable Long id, @RequestBody @Valid ConsultationDto consultationDto) {
+        Consultation consultation = consultationService.create(consultationDto, id);
         return ResponseEntity.ok().body(consultation);
     }
 

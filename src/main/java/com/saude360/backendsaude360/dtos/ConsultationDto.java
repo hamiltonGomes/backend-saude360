@@ -14,7 +14,11 @@ public record ConsultationDto(
         @NotNull
         Instant endServiceDateAndTime,
         @NotNull
-        String patientName,
+        String title,
+        @NotNull
+        String description,
+        @NotNull
+        String color,
         @Valid
         EvolutionHistoryDto evolutionHistory
 ) {
