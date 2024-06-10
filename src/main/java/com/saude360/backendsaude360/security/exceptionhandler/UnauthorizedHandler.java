@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.security.exceptionhandler;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +12,10 @@ import java.io.IOException;
 public class UnauthorizedHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        if (authException.getCause() instanceof JWTVerificationException) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
+        }
     }
 }
