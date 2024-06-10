@@ -27,6 +27,7 @@ public class Orientation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
     private String description;
     private Boolean completed = false;
     private List<String> idImages;
@@ -43,6 +44,7 @@ public class Orientation implements Serializable {
     public Orientation(OrientationDto orientationDto) {
         this.description = orientationDto.description();
         this.completed = orientationDto.completed();
+        this.title = orientationDto.title();
     }
 
     public boolean addImage(String idImage) {

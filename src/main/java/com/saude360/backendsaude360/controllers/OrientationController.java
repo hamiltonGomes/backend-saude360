@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.OrientationDto;
+import com.saude360.backendsaude360.dtos.OrientationWithResponsesDto;
 import com.saude360.backendsaude360.entities.Orientation;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.services.OrientationService;
@@ -33,9 +34,10 @@ public class OrientationController {
     }
 
     @GetMapping("patient/{patientId}")
-    public ResponseEntity<List<Orientation>> findAllOrientationsByPatientId(@PathVariable Long patientId) {
-        List<Orientation> orientations = orientationService.findAllByPatientId(patientId);
-        return ResponseEntity.ok(orientations);
+    public ResponseEntity<List<OrientationWithResponsesDto>> findAllOrientationsByPatientId(@PathVariable Long patientId) {
+//        List<Orientation> orientationsWithResponses = orientationService.findAllByPatientId(patientId);
+        List<OrientationWithResponsesDto> orientationsWithResponses = orientationService.findAllWithResponsesByPatientId(patientId);
+        return ResponseEntity.ok(orientationsWithResponses);
     }
 
     @GetMapping("/{id}")
