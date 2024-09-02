@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.services;
 
 import com.saude360.backendsaude360.dtos.OrientationDto;
+import com.saude360.backendsaude360.dtos.OrientationResponseReturnDto;
 import com.saude360.backendsaude360.dtos.OrientationWithResponsesDto;
 import com.saude360.backendsaude360.entities.Orientation;
 import com.saude360.backendsaude360.entities.OrientationResponse;
@@ -13,8 +14,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,8 +47,21 @@ public class OrientationService {
 
     private OrientationWithResponsesDto mapToOrientationWithResponsesDto(Orientation orientation) {
         List<OrientationResponse> responses = orientationResponseRepository.findAllByOrientationId(orientation.getId());
-        OrientationWithResponsesDto dto = new OrientationWithResponsesDto(orientation.getId(), orientation.getTitle(), orientation.getDescription(), responses);
-        return dto;
+        List<OrientationResponseReturnDto> orientationResponses = responses.stream().map(this::mapToOrientationResponseReturnDto).collect(Collectors.toList());
+
+        return new OrientationWithResponsesDto(orientation.getId(), orientation.getTitle(), orientation.getDescription(), orientationResponses);
+    }
+
+    private OrientationResponseReturnDto mapToOrientationResponseReturnDto(OrientationResponse response) {
+
+        Path filePath = Paths.get(response.getFilePath());
+        try {
+            byte[] imageBytes = Files.readAllBytes(filePath);
+            String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+            return new OrientationResponseReturnDto(response.getContent(), imageBase64, response.getOrientation(), response.getFilePath(), response.getUser(), response.getCreatedAt());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Orientation create(OrientationDto orientationDto, Patient patient) {
