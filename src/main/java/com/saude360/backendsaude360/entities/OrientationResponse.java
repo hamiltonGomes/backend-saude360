@@ -20,6 +20,8 @@ public class OrientationResponse {
 
     private String content;
 
+    private String filePath;
+
     @ManyToOne
     @JoinColumn(name = "orientation_id")
     private Orientation orientation;
@@ -29,44 +31,4 @@ public class OrientationResponse {
     private User user;
 
     private LocalDateTime createdAt;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Orientation getOrientation() {
-        return orientation;
-    }
-
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

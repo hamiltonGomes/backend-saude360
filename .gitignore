@@ -34,3 +34,5 @@ build/
 
 ### Resourses ###
 src/main/resources/application.properties
+
+/uploads/

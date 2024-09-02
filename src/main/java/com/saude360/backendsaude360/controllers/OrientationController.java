@@ -33,13 +33,6 @@ public class OrientationController {
         return ResponseEntity.ok(orientation);
     }
 
-    @GetMapping("patient/{patientId}")
-    public ResponseEntity<List<OrientationWithResponsesDto>> findAllOrientationsByPatientId(@PathVariable Long patientId) {
-//        List<Orientation> orientationsWithResponses = orientationService.findAllByPatientId(patientId);
-        List<OrientationWithResponsesDto> orientationsWithResponses = orientationService.findAllWithResponsesByPatientId(patientId);
-        return ResponseEntity.ok(orientationsWithResponses);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Orientation> findOrientationById(@PathVariable Long id) {
         Orientation orientation = orientationService.findById(id);

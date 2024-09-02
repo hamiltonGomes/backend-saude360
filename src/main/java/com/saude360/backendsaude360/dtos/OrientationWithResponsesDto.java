@@ -10,6 +10,6 @@ public record OrientationWithResponsesDto(
         Long id,
         String title,
         String description,
-        List<OrientationResponse> responses
+        List<OrientationResponseReturnDto> responses
 ) {
 }
