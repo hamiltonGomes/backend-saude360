@@ -53,15 +53,7 @@ public class OrientationService {
     }
 
     private OrientationResponseReturnDto mapToOrientationResponseReturnDto(OrientationResponse response) {
-
-        Path filePath = Paths.get(response.getFilePath());
-        try {
-            byte[] imageBytes = Files.readAllBytes(filePath);
-            String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
-            return new OrientationResponseReturnDto(response.getContent(), imageBase64, response.getOrientation(), response.getFilePath(), response.getUser(), response.getCreatedAt());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return new OrientationResponseReturnDto(response.getContent(), response.getOrientation(), response.getFilePath(), response.getUser(), response.getCreatedAt());
     }
 
     public Orientation create(OrientationDto orientationDto, Patient patient) {
