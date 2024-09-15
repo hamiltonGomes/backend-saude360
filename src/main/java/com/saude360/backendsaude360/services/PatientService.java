@@ -71,7 +71,7 @@ public class PatientService {
         List<PatientFullDto> patientWithConsultations = new ArrayList<>();
 
         for(Patient patient : patients) {
-            PatientFullDto consultationAndOrientation = patientRepository.findConsultationAndOrientationByPatientId(patient.getId());
+            PatientFullDto consultationAndOrientation = patientRepository.findConsultationAndOrientationByPatientId(patient.getId(), userDetails.getUsername());
 
             patientWithConsultations.add(consultationAndOrientation);
         }
