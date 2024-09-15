@@ -16,7 +16,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     @Query(value = "SELECT new com.saude360.backendsaude360.dtos.PatientFullDto(p.id, p.fullName, c.startServiceDateAndTime, o.createdAt, o.updatedAt) "
     + "FROM Patient p LEFT JOIN p.consultations c LEFT JOIN p.orientations o "
-    + "WHERE p.id = ?1 "
+    + "WHERE p.id = ?1 AND c.professional.cpf = ?2 "
     + "ORDER BY c.startServiceDateAndTime DESC")
-    PatientFullDto findConsultationAndOrientationByPatientId(Long patientId);
+    PatientFullDto findConsultationAndOrientationByPatientId(Long patientId, String profissional);
 }
