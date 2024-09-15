@@ -5,12 +5,12 @@ import com.saude360.backendsaude360.entities.users.User;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record OrientationResponseReturnDto (
         String content,
-        String imageBase64,
         Orientation orientation,
-        String filePath,
+        List<String> images,
         User user,
         LocalDateTime createdAt
 ){

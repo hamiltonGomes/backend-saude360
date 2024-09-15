@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orientation_responses")
@@ -20,7 +22,7 @@ public class OrientationResponse {
 
     private String content;
 
-    private String filePath;
+    private List<String> filePath = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "orientation_id")

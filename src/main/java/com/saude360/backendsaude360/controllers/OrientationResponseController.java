@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -31,14 +28,8 @@ public class OrientationResponseController {
 
     @PostMapping("/{orientationId}")
     public ResponseEntity<OrientationResponse> createResponse(@PathVariable Long orientationId,  @RequestParam("content") String content,
-                                                              @RequestParam("image") MultipartFile image) throws IOException {
-
-        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-        Path filePath = Paths.get(UPLOAD_DIR + fileName);
-        Files.createDirectories(filePath.getParent());
-        Files.write(filePath, image.getBytes());
-
-        OrientationResponse orientationResponse = orientationResponseService.createResponse(content, filePath.toString(), orientationId);
+                                                              @RequestParam("images") List<MultipartFile> images) throws IOException {
+        OrientationResponse orientationResponse = orientationResponseService.createResponse(content, images, orientationId);
         return ResponseEntity.ok(orientationResponse);
     }
 
