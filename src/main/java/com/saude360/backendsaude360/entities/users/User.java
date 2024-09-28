@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -48,6 +50,12 @@ public class User implements Serializable {
 
     protected String idProfilePicture;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name="users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
+    private List<UserRole> roles = new ArrayList<>();
+
     public User(String fullName, LocalDate birthDate, String email, String phoneNumber, String cpf, String password, String idProfilePicture) {
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -56,5 +64,9 @@ public class User implements Serializable {
         this.cpf = cpf;
         this.password = password;
         this.idProfilePicture = idProfilePicture;
+    }
+
+    public void addRole(UserRole role) {
+        roles.add(role);
     }
 }

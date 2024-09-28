@@ -10,4 +10,8 @@ public class BCryptPassword {
     public static String encryptPassword(User user) {
         return BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(passwordComplexity));
     }
+
+    public static String encryptPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(passwordComplexity));
+    }
 }
