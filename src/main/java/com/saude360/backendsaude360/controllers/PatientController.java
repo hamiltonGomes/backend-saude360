@@ -5,6 +5,8 @@ import com.saude360.backendsaude360.dtos.PatientFullDto;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
+import com.saude360.backendsaude360.entities.users.UserRole;
+import com.saude360.backendsaude360.enums.UserRoles;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
 import com.saude360.backendsaude360.services.PatientService;
@@ -47,7 +49,9 @@ public class PatientController {
             Professional professional = professionalRepository.findByCpf(professionalCpf);
 
             Patient patient = new Patient(patientDto, professional);
-            patient.setPassword(BCryptPassword.encryptPassword(patient));
+
+            UserRole patientRole = new UserRole(null, UserRoles.ROLE_PATIENT);
+            patient.addRole(patientRole);
 
             User newPatient = userService.create(patient);
             var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{patientId}")

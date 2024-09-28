@@ -8,6 +8,7 @@ import com.saude360.backendsaude360.entities.Address;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.Orientation;
 import com.saude360.backendsaude360.entities.transactions.PatientTransaction;
+import com.saude360.backendsaude360.utils.BCryptPassword;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -69,6 +70,7 @@ public class Patient extends User {
     private String generateRandomPassword() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String rawPassword = Long.toHexString(Double.doubleToLongBits(Math.random()));
-        return passwordEncoder.encode(rawPassword);
+
+        return BCryptPassword.encryptPassword(rawPassword);
     }
 }

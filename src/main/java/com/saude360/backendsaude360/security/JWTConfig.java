@@ -29,6 +29,52 @@ public class JWTConfig {
     @Autowired
     private JWTAuthenticationFilter filter;
 
+    private static final String [] ENDPOINTS_POST_WITH_AUTHENTICATION_NOT_REQUIRED = {
+            "/users/login",
+            "/user/professional/",
+            "/api/authentication/login",
+            "/healthSector/"
+    };
+
+    private static final String [] ENDPOINTS_GET_WITH_AUTHENTICATION_NOT_REQUIRED = {
+            "/healthSector/",
+    };
+
+    // Endpoints que requerem autenticação para serem acessados
+    private static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
+            "/healthSector/",
+            "/user/patient/",
+            "/user/patient/{id}",
+            "/user/professional/",
+            "/user/professional/{id}",
+            "/consultation/",
+            "/consultation/{id}",
+    };
+
+    // Endpoints que só podem ser acessador por usuários com permissão de profissional
+    private static final String [] ENDPOINTS_PROFESSIONAL = {
+            "/user/patient/",
+            "/user/professional/",
+            "/user/patient/professional",
+            "/user/patient/consultation-and-orientation",
+            "/consultation/patient/{patientId}",
+            "/clinic/",
+            "/clinic/{id}",
+    };
+
+    // Endpoints que só podem ser acessador por usuários com permissão de paciente
+    private static final String [] ENDPOINTS_PATIENT = {
+            ""
+    };
+
+    private static final String [] ENDPOINTS_PUT_PATIENT = {
+            "/user/patient/{id}"
+    };
+
+    private static final String [] ENDPOINTS_PUT_PROFESSIONAL = {
+            "/user/professional/{id}"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -36,12 +82,14 @@ public class JWTConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/user/professional/").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user/patient/professional/").permitAll() // essa autorização não está funcionando
-                        .requestMatchers(HttpMethod.POST, "/healthSector/").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/authentication/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, ENDPOINTS_POST_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
+                        .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
+                        .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PATIENT).hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PROFESSIONAL).hasRole("PROFESSIONAL")
+                        .requestMatchers(ENDPOINTS_PROFESSIONAL).hasRole("PROFESSIONAL")
+                        .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
                         .anyRequest()
-                        .authenticated())
+                        .denyAll())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exception) -> exception.authenticationEntryPoint(new UnauthorizedHandler()))
                 .build();

@@ -6,6 +6,8 @@ import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.entities.HealthSector;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
+import com.saude360.backendsaude360.entities.users.UserRole;
+import com.saude360.backendsaude360.enums.UserRoles;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.services.HealthSectorService;
 import com.saude360.backendsaude360.services.ProfessionalService;
@@ -59,6 +61,10 @@ public class ProfessionalController {
             }
 
             professional.setPassword(BCryptPassword.encryptPassword(professional));
+            UserRole professionalRole = new UserRole(null, UserRoles.ROLE_PROFESSIONAL);
+
+            professional.addRole(professionalRole);
+
             var newProfessional = userService.create(professional);
 
             var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
