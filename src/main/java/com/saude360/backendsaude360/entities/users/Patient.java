@@ -1,13 +1,11 @@
 package com.saude360.backendsaude360.entities.users;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.dtos.PatientDto;
 import com.saude360.backendsaude360.entities.Address;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.Orientation;
-import com.saude360.backendsaude360.entities.transactions.PatientTransaction;
 import com.saude360.backendsaude360.utils.BCryptPassword;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,10 +26,6 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Patient extends User {
     private List<String> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<PatientTransaction> patientTransactions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "patients")
     @JsonIgnore
