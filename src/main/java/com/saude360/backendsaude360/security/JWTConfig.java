@@ -43,6 +43,8 @@ public class JWTConfig {
     // Endpoints que requerem autenticação para serem acessados
     private static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/healthSector/",
+            "/transaction/",
+            "/transaction/{id}",
             "/user/patient/",
             "/user/patient/{id}",
             "/user/professional/",

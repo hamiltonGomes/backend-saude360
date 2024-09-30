@@ -1,5 +1,8 @@
-package com.saude360.backendsaude360.entities.transactions;
+package com.saude360.backendsaude360.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.saude360.backendsaude360.dtos.TransactionDto;
+import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.enums.PaymentMethod;
 import com.saude360.backendsaude360.enums.PaymentStatus;
 import com.saude360.backendsaude360.enums.TransactionType;
@@ -28,9 +31,7 @@ public class Transaction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String transactionDescription;
-
-    private ZonedDateTime date;
+    private String name;
 
     private BigDecimal value;
 
@@ -38,10 +39,26 @@ public class Transaction implements Serializable {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
+    private ZonedDateTime date;
+
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
+    @ManyToOne
+    @JoinColumn(name = "professional_id")
+    @JsonManagedReference
+    private Professional professional;
+
+    public Transaction(TransactionDto transactionDto, Professional professional) {
+        this.name = transactionDto.name();
+        this.value = transactionDto.value();
+        this.transactionType = transactionDto.transactionType();
+        this.date = transactionDto.date();
+        this.paymentMethod = transactionDto.paymentMethod();
+        this.paymentStatus = transactionDto.paymentStatus();
+        this.professional = professional;
+    }
 }

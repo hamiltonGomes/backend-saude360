@@ -6,7 +6,7 @@ import com.saude360.backendsaude360.dtos.ProfessionalDto;
 import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.HealthSector;
-import com.saude360.backendsaude360.entities.transactions.ProfessionalTransaction;
+import com.saude360.backendsaude360.entities.Transaction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +29,7 @@ public class Professional extends User {
 
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<ProfessionalTransaction> professionalTransactions = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "professional_health_sectors",
