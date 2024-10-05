@@ -35,7 +35,6 @@ public class Transaction implements Serializable {
 
     private BigDecimal value;
 
-    @Column(insertable = false, updatable = false, name = "transaction_type")
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
