@@ -2,6 +2,7 @@ package com.saude360.backendsaude360.controllers.exceptions;
 
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
+import com.saude360.backendsaude360.exceptions.ResetPasswordInvalidException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -51,6 +51,14 @@ public class ControllerExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String message = e.getBindingResult().getFieldErrors().stream().findFirst().map(DefaultMessageSourceResolvable::getDefaultMessage).orElse(e.getMessage());
         StandardError standardError = new StandardError(ZonedDateTime.now(ZoneId.of(TIME_ZONE)), status.value(), error, message, request.getRequestURI());
+        return ResponseEntity.status(status).body(standardError);
+    }
+
+    @ExceptionHandler({ResetPasswordInvalidException.class})
+    public ResponseEntity<StandardError> handleTimeExpired(ResetPasswordInvalidException e, HttpServletRequest request) {
+        String error = "Código inválido.";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError standardError = new StandardError(ZonedDateTime.now(ZoneId.of(TIME_ZONE)), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);
     }
 }

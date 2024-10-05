@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.controllers;
 
+import com.saude360.backendsaude360.dtos.ResetPasswordDto;
 import com.saude360.backendsaude360.entities.users.User;
 import com.saude360.backendsaude360.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,19 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable Long id) {
         userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/forget-password/{cpf}")
+    public ResponseEntity<User> forgetPassword(@PathVariable String cpf) {
+        userService.forgetPassword(cpf);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/reset-password")
+    public ResponseEntity<User> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+
+        userService.resetPassowrd(resetPasswordDto);
         return ResponseEntity.noContent().build();
     }
 }

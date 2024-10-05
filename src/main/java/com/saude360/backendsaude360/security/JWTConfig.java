@@ -33,7 +33,9 @@ public class JWTConfig {
             "/users/login",
             "/user/professional/",
             "/api/authentication/login",
-            "/healthSector/"
+            "/healthSector/",
+            "/user/forget-password/{cpf}",
+            "/user/reset-password",
     };
 
     private static final String [] ENDPOINTS_GET_WITH_AUTHENTICATION_NOT_REQUIRED = {
