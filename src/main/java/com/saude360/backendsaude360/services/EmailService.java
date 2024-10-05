@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.services;
 
+import com.saude360.backendsaude360.entities.PasswordReset;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
 import jakarta.mail.MessagingException;
@@ -56,10 +57,32 @@ public class EmailService {
             htmlContent = templateEngine.process("professionalRegister", ctx);
         } else {
             email.setSubject("Bem-vindo ao Saúde360 - Paciente");
-            ctx.setVariable("password", user.getPassword());
 
-            htmlContent = templateEngine.process("templates/patientRegister", ctx);
+            htmlContent = templateEngine.process("patientRegister", ctx);
         }
+
+        email.setText(htmlContent, true);
+
+        javaMailSender.send(mimeMessage);
+    }
+
+    public void sendEmailForgetPassword(PasswordReset passwordReset) throws MessagingException, UnsupportedEncodingException {
+
+        final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        final MimeMessageHelper email = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        email.setTo(passwordReset.getUser().getEmail());
+
+        email.setFrom(new InternetAddress(from, fromName));
+
+        final Context ctx = new Context(LocaleContextHolder.getLocale());
+
+        ctx.setVariable("name", passwordReset.getUser().getFullName());
+        ctx.setVariable("code", passwordReset.getCode());
+
+        email.setSubject("Recuperação de senha - Saúde360");
+
+        final String htmlContent = templateEngine.process("forgetPassword", ctx);
 
         email.setText(htmlContent, true);
 
