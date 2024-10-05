@@ -52,7 +52,7 @@ public class JWTConfig {
             "/user/professional/",
             "/user/professional/{id}",
             "/consultation/",
-            "/consultation/{id}",
+            "/consultation/{id}"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de profissional
@@ -64,6 +64,7 @@ public class JWTConfig {
             "/consultation/patient/{patientId}",
             "/clinic/",
             "/clinic/{id}",
+            "/orientation/patient/{patientId}"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de paciente
