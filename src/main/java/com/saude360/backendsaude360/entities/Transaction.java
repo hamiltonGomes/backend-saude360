@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -38,7 +38,7 @@ public class Transaction implements Serializable {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    private ZonedDateTime date;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
