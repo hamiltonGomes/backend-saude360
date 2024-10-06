@@ -22,7 +22,8 @@ public class OrientationResponse {
 
     private String content;
 
-    private List<String> filePath = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<File> files = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "orientation_id")
@@ -33,4 +34,12 @@ public class OrientationResponse {
     private User user;
 
     private LocalDateTime createdAt;
+
+    public OrientationResponse(String content, List<File> files, Orientation orientation, User user, LocalDateTime createdAt) {
+        this.content = content;
+        this.files = files;
+        this.orientation = orientation;
+        this.user = user;
+        this.createdAt = createdAt;
+    }
 }
