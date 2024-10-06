@@ -1,14 +1,17 @@
 package com.saude360.backendsaude360.services;
 
+import com.saude360.backendsaude360.dtos.FileDto;
 import com.saude360.backendsaude360.dtos.OrientationDto;
 import com.saude360.backendsaude360.dtos.OrientationResponseReturnDto;
 import com.saude360.backendsaude360.dtos.OrientationWithResponsesDto;
+import com.saude360.backendsaude360.entities.File;
 import com.saude360.backendsaude360.entities.Orientation;
 import com.saude360.backendsaude360.entities.OrientationResponse;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.repositories.OrientationRepository;
 import com.saude360.backendsaude360.repositories.OrientationResponseRepository;
+import com.saude360.backendsaude360.services.external.AzureService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -31,13 +35,15 @@ import java.util.stream.Collectors;
 public class OrientationService {
     private final OrientationRepository orientationRepository;
     private final OrientationResponseRepository orientationResponseRepository;
+    private final AzureService azureService;
     private static final String NOT_FOUND_MESSAGE = "Orientação com ID: %d não foi encontrada.";
 
     @Autowired
-    public OrientationService(OrientationRepository orientationRepository, OrientationResponseRepository orientationResponseRepository) {
+    public OrientationService(OrientationRepository orientationRepository, OrientationResponseRepository orientationResponseRepository, AzureService azureService) {
         this.orientationRepository = orientationRepository;
         this.orientationResponseRepository = orientationResponseRepository;
 
+        this.azureService = azureService;
     }
 
     public List<OrientationWithResponsesDto> findAllWithResponsesByPatientId(Long patientId) {
@@ -53,7 +59,16 @@ public class OrientationService {
     }
 
     private OrientationResponseReturnDto mapToOrientationResponseReturnDto(OrientationResponse response) {
-        return new OrientationResponseReturnDto(response.getContent(), response.getOrientation(), response.getFilePath(), response.getUser(), response.getCreatedAt());
+        List<FileDto> files = new ArrayList<>();
+       for(File filePath : response.getFiles()) {
+            try {
+                FileDto fileDto = new FileDto(azureService.downloadFile(filePath.getName()), filePath.getType(), filePath.getSize());
+                files.add(fileDto);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+       }
+        return new OrientationResponseReturnDto(response.getContent(), response.getOrientation(), files, response.getUser(), response.getCreatedAt());
     }
 
     public Orientation create(OrientationDto orientationDto, Patient patient) {

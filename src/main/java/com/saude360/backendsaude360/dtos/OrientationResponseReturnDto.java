@@ -10,7 +10,7 @@ import java.util.List;
 public record OrientationResponseReturnDto (
         String content,
         Orientation orientation,
-        List<String> images,
+        List<FileDto> files,
         User user,
         LocalDateTime createdAt
 ){
