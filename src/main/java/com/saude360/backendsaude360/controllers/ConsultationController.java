@@ -2,6 +2,7 @@ package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.ConsultationDto;
 import com.saude360.backendsaude360.dtos.ConsultationUpdateDto;
+import com.saude360.backendsaude360.dtos.EvolutionHistoryDto;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.services.ConsultationService;
 import jakarta.transaction.Transactional;
@@ -33,6 +34,15 @@ public class ConsultationController {
     public ResponseEntity<Consultation> update(@PathVariable Long id, @RequestBody @Valid ConsultationUpdateDto consultationUpdateDto) {
         Consultation consultation = consultationService.update(id, consultationUpdateDto);
         return ResponseEntity.ok().body(consultation);
+    }
+
+    @PostMapping("/{consultationId}/evolution-history")
+    @Transactional
+    public ResponseEntity<Consultation> addEvolutionHistory(
+            @PathVariable Long consultationId,
+            @RequestBody @Valid EvolutionHistoryDto evolutionHistoryDto) {
+        Consultation updatedConsultation = consultationService.addEvolutionHistory(consultationId, evolutionHistoryDto);
+        return ResponseEntity.ok().body(updatedConsultation);
     }
 
     @GetMapping("/")

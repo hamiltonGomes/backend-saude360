@@ -4,11 +4,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 public record ConsultationDto(
         @NotNull
-        ZonedDateTime date,
+        LocalDate date,
         @NotNull
         Instant startServiceDateAndTime,
         @NotNull

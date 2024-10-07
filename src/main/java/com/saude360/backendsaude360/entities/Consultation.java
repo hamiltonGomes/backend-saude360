@@ -30,7 +30,7 @@ public class Consultation implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private ZonedDateTime date;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -65,9 +65,20 @@ public class Consultation implements Serializable {
     @JoinColumn(name = "evolution_history_id")
     private EvolutionHistory evolutionHistory;
 
-    private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+    private LocalDateTime createdAt;
 
-    private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+        updatedAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+    }
 
     public Consultation(ConsultationDto consultationDto, Patient patient, EvolutionHistory evolutionHistory, Professional professional) {
         this.date = consultationDto.date();

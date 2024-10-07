@@ -2,6 +2,7 @@ package com.saude360.backendsaude360.services;
 
 import com.saude360.backendsaude360.dtos.ConsultationDto;
 import com.saude360.backendsaude360.dtos.ConsultationUpdateDto;
+import com.saude360.backendsaude360.dtos.EvolutionHistoryDto;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.EvolutionHistory;
 import com.saude360.backendsaude360.entities.users.Patient;
@@ -17,8 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -46,6 +47,15 @@ public class ConsultationService {
 
         return consultationRepository.save(consultation);
     }
+
+    public Consultation addEvolutionHistory(Long consultationId, EvolutionHistoryDto evolutionHistoryDto) {
+        Consultation consultation = consultationRepository.findById(consultationId)
+                .orElseThrow(() -> new ObjectNotFoundException("Consulta com o ID " + consultationId + " não foi encontrada."));
+        EvolutionHistory evolutionHistory = new EvolutionHistory(evolutionHistoryDto);
+        consultation.setEvolutionHistory(evolutionHistory);
+        return consultationRepository.save(consultation);
+    }
+
 
     private Patient findPatientByName(String patientName, Professional professional) {
         List<Patient> patients = professional.getPatients();
@@ -101,7 +111,7 @@ public class ConsultationService {
         }
 
 
-        consultation.setUpdatedAt(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
+        consultation.setUpdatedAt(LocalDateTime.now((ZoneId.of("America/Sao_Paulo"))));
         return consultationRepository.save(consultation);
     }
 
