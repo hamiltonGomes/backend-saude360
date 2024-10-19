@@ -58,7 +58,8 @@ public class JWTConfig {
             "/orientation/{id}",
             "/orientation/",
             "/orientation-responses/{orientationId}",
-            "/orientation-responses/{patientId}"
+            "/orientation-responses/{patientId}",
+            "/orientation-responses/"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de profissional

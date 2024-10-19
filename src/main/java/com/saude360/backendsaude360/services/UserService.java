@@ -110,4 +110,8 @@ public class UserService {
         userRepository.save(user);
         passwordResetRepository.delete(passwordReset);
     }
+
+    public User findByCpf(String cpf) {
+        return userRepository.findByCpf(cpf).orElseThrow(() -> new ObjectNotFoundException("Usuário com CPF: " + cpf + " não foi encontrado."));
+    }
 }
