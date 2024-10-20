@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.saude360.backendsaude360.data.UserDetailsSecurity;
+import com.saude360.backendsaude360.exceptions.TokenInvalidException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,7 @@ public class JWTToken {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e) {
-            return "";
+            throw new TokenInvalidException(e.getMessage());
         }
     }
 
