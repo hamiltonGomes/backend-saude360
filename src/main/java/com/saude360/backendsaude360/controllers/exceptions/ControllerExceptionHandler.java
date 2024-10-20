@@ -3,11 +3,13 @@ package com.saude360.backendsaude360.controllers.exceptions;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.exceptions.ResetPasswordInvalidException;
+import com.saude360.backendsaude360.exceptions.TokenInvalidException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,6 +60,14 @@ public class ControllerExceptionHandler {
     public ResponseEntity<StandardError> handleTimeExpired(ResetPasswordInvalidException e, HttpServletRequest request) {
         String error = "Código inválido.";
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError standardError = new StandardError(ZonedDateTime.now(ZoneId.of(TIME_ZONE)), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(standardError);
+    }
+
+    @ExceptionHandler({TokenInvalidException.class})
+    public ResponseEntity<StandardError> handleTokenInvalid(TokenInvalidException e, HttpServletRequest request) {
+        String error = "Token inválido.";
+        HttpStatus status = HttpStatus.FORBIDDEN;
         StandardError standardError = new StandardError(ZonedDateTime.now(ZoneId.of(TIME_ZONE)), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);
     }

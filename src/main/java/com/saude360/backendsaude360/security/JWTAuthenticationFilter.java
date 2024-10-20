@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.security;
 
+import com.saude360.backendsaude360.exceptions.TokenInvalidException;
 import com.saude360.backendsaude360.services.UserDetailsSecurityService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,15 +25,23 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = tokenRecovery(request);
 
-        if (token != null) {
-            var login = jwtToken.validateToken(token);
-            var user = userDetailsSecurityService.loadUserByUsername(login);
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        try  {
+            var token = tokenRecovery(request);
+
+            if (token != null) {
+                var login = jwtToken.validateToken(token);
+                var user = userDetailsSecurityService.loadUserByUsername(login);
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            filterChain.doFilter(request, response);
+        } catch (TokenInvalidException e) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Token inválido\", \"message\": \"" + e.getMessage() + "\"}");
         }
-        filterChain.doFilter(request, response);
+
     }
 
     private String tokenRecovery(HttpServletRequest request) {

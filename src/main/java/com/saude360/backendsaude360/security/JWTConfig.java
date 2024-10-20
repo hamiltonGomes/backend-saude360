@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.security;
 
 
+import com.saude360.backendsaude360.security.exceptionhandler.CustomAccessDeniedHandler;
 import com.saude360.backendsaude360.security.exceptionhandler.UnauthorizedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,9 @@ public class JWTConfig {
 
     @Autowired
     private JWTAuthenticationFilter filter;
+
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
 
     private static final String [] ENDPOINTS_POST_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/users/login",
@@ -103,7 +107,9 @@ public class JWTConfig {
                         .anyRequest()
                         .denyAll())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((exception) -> exception.authenticationEntryPoint(new UnauthorizedHandler()))
+                .exceptionHandling((exception) -> exception
+                        .authenticationEntryPoint(new UnauthorizedHandler())
+                        .accessDeniedHandler(accessDeniedHandler))
                 .build();
     }
 
