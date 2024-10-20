@@ -57,6 +57,7 @@ public class JWTConfig {
             "/user/professional/",
             "/user/professional/{id}",
             "/consultation/",
+            "/consultation/patient/{patientId}",
             "/consultation/{id}/evolution-history",
             "/consultation/{id}",
             "/orientation/{id}",
@@ -72,7 +73,6 @@ public class JWTConfig {
             "/user/professional/",
             "/user/patient/professional",
             "/user/patient/consultation-and-orientation",
-            "/consultation/patient/{patientId}",
             "/clinic/",
             "/clinic/{id}",
             "/orientation/patient/{patientId}"
