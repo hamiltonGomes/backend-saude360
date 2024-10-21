@@ -57,6 +57,12 @@ public class ConsultationController {
         return ResponseEntity.ok().body(consultations);
     }
 
+    @GetMapping("/patient/")
+    public ResponseEntity<List<Consultation>> findAllConsultationsByPatient() {
+        List<Consultation> consultations = consultationService.findAllConsultationsByPatient();
+        return ResponseEntity.ok().body(consultations);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Consultation> findById(@PathVariable Long id) {
         Consultation consultation = consultationService.findById(id);

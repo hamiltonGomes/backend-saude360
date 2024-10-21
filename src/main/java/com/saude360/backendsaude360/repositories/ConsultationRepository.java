@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface ConsultationRepository extends JpaRepository<Consultation, Long> {
     List<Consultation> findAllByProfessionalAndPatient(Professional professional, Patient patient);
+
+    List<Consultation> findAllByPatient(Patient patient);
 }

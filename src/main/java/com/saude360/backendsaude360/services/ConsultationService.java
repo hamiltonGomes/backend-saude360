@@ -128,6 +128,14 @@ public class ConsultationService {
         return consultationRepository.findAllByProfessionalAndPatient(professional, patient);
     }
 
+    public List<Consultation> findAllConsultationsByPatient() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String patientCpf = userDetails.getUsername();
+        var patient = patientRepository.findByCpf(patientCpf).orElseThrow(() -> new ObjectNotFoundException("Paciente não encontrado"));
+
+        return consultationRepository.findAllByPatient(patient);
+    }
+
     public Consultation findById(Long id) {
         return consultationRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, id)));

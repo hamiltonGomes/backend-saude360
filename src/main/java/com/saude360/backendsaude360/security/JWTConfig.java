@@ -83,6 +83,10 @@ public class JWTConfig {
             ""
     };
 
+    private static final String [] ENDPOINTS_GET_PATIENT = {
+            "/consultation/patient/"
+    };
+
     private static final String [] ENDPOINTS_PUT_PATIENT = {
             "/user/patient/{id}"
     };
@@ -101,6 +105,7 @@ public class JWTConfig {
                         .requestMatchers(HttpMethod.POST, ENDPOINTS_POST_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PATIENT).hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_PATIENT).hasRole("PATIENT")
                         .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PROFESSIONAL).hasRole("PROFESSIONAL")
                         .requestMatchers(ENDPOINTS_PROFESSIONAL).hasRole("PROFESSIONAL")
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
