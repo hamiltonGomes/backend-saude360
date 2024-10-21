@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
@@ -23,4 +24,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
             + "WHERE p.id = ?1 "
             + "GROUP BY p.id, p.fullName")
     PatientFullDto findConsultationAndOrientationByPatientId(Long patientId, String profissional);
+
+    Optional<Patient> findByCpf(String cpf);
 }
