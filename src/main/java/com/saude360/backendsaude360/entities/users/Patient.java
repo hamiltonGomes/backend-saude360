@@ -6,7 +6,6 @@ import com.saude360.backendsaude360.dtos.PatientDto;
 import com.saude360.backendsaude360.entities.Address;
 import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.Orientation;
-import com.saude360.backendsaude360.utils.BCryptPassword;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +63,15 @@ public class Patient extends User {
 
     private String generateRandomPassword() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String rawPassword = Long.toHexString(Double.doubleToLongBits(Math.random()));
 
-        return BCryptPassword.encryptPassword(rawPassword);
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] randomBytes = new byte[16];
+        secureRandom.nextBytes(randomBytes);
+
+        StringBuilder rawPassword = new StringBuilder();
+        for (byte b : randomBytes) {
+            rawPassword.append(String.format("%02x", b));
+        }
+        return passwordEncoder.encode(rawPassword.toString());
     }
 }
