@@ -19,9 +19,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable Long id) {
-        var user = userService.findById(id);
+    @GetMapping(value = "/{cpf}")
+    public ResponseEntity<User> findUserByCpf(@PathVariable String cpf) {
+        var user = userService.findByCpf(cpf);
         return ResponseEntity.ok().body(user);
     }
 
