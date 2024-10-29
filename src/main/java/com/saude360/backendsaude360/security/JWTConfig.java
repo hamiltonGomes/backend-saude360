@@ -85,6 +85,7 @@ public class JWTConfig {
     public static final String [] ENDPOINTS_GET_USER = {
             "/user/",
             "/user/{id}",
+            "/user/{cpf}",
             "/user/professional/",
             "/user/professional/{id}",
             "/user/professional/",
