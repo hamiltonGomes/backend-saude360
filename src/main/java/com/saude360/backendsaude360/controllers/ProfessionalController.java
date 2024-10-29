@@ -75,10 +75,10 @@ public class ProfessionalController {
         }
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/")
     @Transactional
-    public ResponseEntity<Optional<Professional>> updateProfessional(@PathVariable Long id, @RequestBody @Valid ProfessionalDto professionalDto) {
-        Optional<Professional> professionalUpdated = professionalService.update(id, professionalDto);
+    public ResponseEntity<Optional<Professional>> updateProfessional(@RequestBody @Valid ProfessionalDto professionalDto) {
+        Optional<Professional> professionalUpdated = professionalService.update(professionalDto);
 
         return ResponseEntity.ok().body(professionalUpdated);
     }

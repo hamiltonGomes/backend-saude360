@@ -116,7 +116,12 @@ public class ConsultationService {
     }
 
     public List<Consultation> findAll() {
-        return consultationRepository.findAll();
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String professionalCpf = userDetails.getUsername();
+        Professional professional = professionalRepository.findByCpf(professionalCpf);
+
+
+        return consultationRepository.findAllByProfessional(professional);
     }
 
     public List<Consultation> findAllConsultationsByPatientAndProfessional(Long patientId) {

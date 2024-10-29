@@ -13,4 +13,6 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     List<Consultation> findAllByProfessionalAndPatient(Professional professional, Patient patient);
 
     List<Consultation> findAllByPatient(Patient patient);
+
+    List<Consultation> findAllByProfessional(Professional professional);
 }

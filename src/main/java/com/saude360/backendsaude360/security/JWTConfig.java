@@ -46,40 +46,69 @@ public class JWTConfig {
             "/healthSector/",
     };
 
-    // Endpoints que requerem autenticação para serem acessados
-    private static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/healthSector/",
+    private static final String [] ENDPOINTS_PUT_PROFESSIONAL = {
+            "/user/professional/{id}",
+            "/transaction/{id}",
+            "/professional/",
+            "/consultation/{id}",
+            "/clinic/{id}"
+    };
+
+    public static final String [] ENDPOINTS_GET_PROFESSIONAL = {
             "/transaction/",
             "/transaction/{id}",
-            "/user/",
-            "/user/patient/",
-            "/user/patient/{id}",
-            "/user/professional/",
-            "/user/professional/{id}",
-            "/consultation/",
-            "/consultation/patient/{patientId}",
-            "/consultation/{id}/evolution-history",
-            "/consultation/{id}",
-            "/orientation/{id}",
-            "/orientation/",
-            "/orientation-responses/{orientationId}",
-            "/orientation-responses/{patientId}",
-            "/orientation-responses/"
-    };
-
-    // Endpoints que só podem ser acessador por usuários com permissão de profissional
-    private static final String [] ENDPOINTS_PROFESSIONAL = {
-            "/user/patient/",
-            "/user/professional/",
             "/user/patient/professional",
             "/user/patient/consultation-and-orientation",
-            "/clinic/",
-            "/clinic/{id}",
-            "/orientation/patient/{patientId}"
+            "/user/patient/{id}",
+            "/consultation/",
+            "/consultation/patient/{patientId}"
     };
 
-    // Endpoints que só podem ser acessador por usuários com permissão de paciente
-    private static final String [] ENDPOINTS_PATIENT = {
+    public static final String [] ENDPOINTS_DELETE_PROFESSIONAL = {
+            "/transaction/{id}",
+            "/user/professional/{id}",
+            "/orientation/{id}",
+            "/consultation/{id}",
+            "/clinic/{id}"
+    };
+
+    public static final String [] ENDPOINTS_POST_PROFESSIONAL = {
+            "/transaction/",
+            "/user/professional/",
+            "/user/patient/",
+            "/orientation/patient/{patientId}",
+            "/consultation/{id}",
+            "/consultation/{consultationId}/evolution-history",
+            "/clinic/"
+    };
+
+    public static final String [] ENDPOINTS_GET_USER = {
+            "/user/",
+            "/user/{id}",
+            "/user/professional/",
+            "/user/professional/{id}",
+            "/user/professional/",
+            "/user/patient/",
+            "/user/patient/{id}",
+            "/orientation-responses/{patientId}",
+            "/orientation-responses/",
+            "/orientation/",
+            "/orientation/{id}",
+            "/consultation/",
+            "/consultation/{id}",
+            "/clinic/",
+            "/clinic/{id}",
+    };
+
+    public static final String [] ENDPOINTS_POST_USER = {
+            "/orientation-responses/{orientationId}",
+    };
+
+    public static final String [] ENDPOINTS_PUT_USER = {
+            ""
+    };
+
+    public static final String [] ENDPOINTS_DELETE_USER = {
             ""
     };
 
@@ -87,12 +116,16 @@ public class JWTConfig {
             "/consultation/patient/"
     };
 
+    private static final String [] ENDPOINT_POST_PATIENT = {
+            ""
+    };
+
     private static final String [] ENDPOINTS_PUT_PATIENT = {
             "/user/patient/{id}"
     };
 
-    private static final String [] ENDPOINTS_PUT_PROFESSIONAL = {
-            "/user/professional/{id}"
+    private static final String [] ENDPOINTS_DELETE_PATIENT = {
+            ""
     };
 
     @Bean
@@ -106,9 +139,14 @@ public class JWTConfig {
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PATIENT).hasRole("PATIENT")
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_PATIENT).hasRole("PATIENT")
+//                        .requestMatchers(HttpMethod.POST, ENDPOINT_POST_PATIENT).hasRole("PATIENT")
+//                        .requestMatchers(HttpMethod.DELETE, ENDPOINTS_DELETE_PATIENT).hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.DELETE, ENDPOINTS_DELETE_PROFESSIONAL).hasRole("PROFESSIONAL")
                         .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PROFESSIONAL).hasRole("PROFESSIONAL")
-                        .requestMatchers(ENDPOINTS_PROFESSIONAL).hasRole("PROFESSIONAL")
-                        .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
+                        .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_PROFESSIONAL).hasRole("PROFESSIONAL")
+                        .requestMatchers(HttpMethod.POST, ENDPOINTS_POST_PROFESSIONAL).hasRole("PROFESSIONAL")
+                        .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_USER).authenticated()
+                        .requestMatchers(HttpMethod.POST, ENDPOINTS_POST_USER).authenticated()
                         .anyRequest()
                         .denyAll())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
