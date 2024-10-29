@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,7 @@ import java.util.Optional;
 public class ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
-    private static final String NOT_FOUND_MESSAGE = "Profissional com ID: %d não foi encontrado.";
+    private static final String NOT_FOUND_MESSAGE = "Profissional com ID: %s não foi encontrado.";
 
     @Autowired
     public ProfessionalService(ProfessionalRepository professionalRepository) {
@@ -29,15 +31,16 @@ public class ProfessionalService {
         return professionalRepository.save(professional);
     }
 
-    public Optional<Professional> update(Long id, ProfessionalDto professionalDto) {
-        Optional<Professional> optionalProfessional = professionalRepository.findById(id);
+    public Optional<Professional> update(ProfessionalDto professionalDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (optionalProfessional.isPresent()) {
-            Professional professional = optionalProfessional.get();
+        Professional professional = professionalRepository.findByCpf(userDetails.getUsername());
+
+        if (professional != null) {
             BeanUtils.copyProperties(professionalDto, professional);
             return Optional.of(professionalRepository.save(professional));
         } else {
-            throw new ObjectNotFoundException(String.format(String.format(NOT_FOUND_MESSAGE, id)));
+            throw new ObjectNotFoundException(String.format(String.format(NOT_FOUND_MESSAGE, userDetails.getUsername())));
         }
     }
 

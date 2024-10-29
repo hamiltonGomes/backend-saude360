@@ -45,6 +45,10 @@ public class ConsultationController {
         return ResponseEntity.ok().body(updatedConsultation);
     }
 
+    /**
+     * Retorna todas as consultas do profissional logado
+     * @return
+     */
     @GetMapping("/")
     public ResponseEntity<List<Consultation>> findAll() {
         List<Consultation> consultations = consultationService.findAll();
