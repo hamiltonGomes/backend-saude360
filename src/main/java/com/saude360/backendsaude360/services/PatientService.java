@@ -6,6 +6,7 @@ import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.repositories.users.PatientRepository;
+import com.saude360.backendsaude360.utils.BCryptPassword;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,21 +23,25 @@ import java.util.Optional;
 public class PatientService {
 
     private final PatientRepository patientRepository;
-    private static final String NOT_FOUND_MESSAGE = "Paciente com id %s não foi encontrado.F";
+    private static final String NOT_FOUND_MESSAGE = "Paciente com cpf %s não foi encontrado.F";
 
     @Autowired
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
 
-    public Optional<Patient> update(Long patientId, PatientDto patientDto) {
-        Optional<Patient> optionalPatient = patientRepository.findById(patientId);
+    public Optional<Patient> update(PatientDto patientDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Optional<Patient> optionalPatient = patientRepository.findByCpf(userDetails.getUsername());
         if (optionalPatient.isPresent()) {
             Patient patient = optionalPatient.get();
+            var oldPassword = patient.getPassword();
             BeanUtils.copyProperties(patientDto, patient, "professionals");
+            patient.setPassword(BCryptPassword.encryptPassword(patientDto.password()));
             return Optional.of(patientRepository.save(patient));
         } else {
-            throw new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, patientId));
+            throw new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, userDetails.getUsername()));
         }
     }
 
