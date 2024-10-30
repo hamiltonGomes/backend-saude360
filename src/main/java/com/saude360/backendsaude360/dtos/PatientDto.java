@@ -18,6 +18,7 @@ public record PatientDto(
         @Email
         @NotBlank
         String email,
+        String password,
         @NotNull
         @Pattern(regexp = "^\\(\\d{2}\\)9\\d{4}-\\d{4}$", message = "The phone number must be in the format: " +
                 "(dd)9xxxx-xxxx (Numbers only). It should contain 11 digits (DDD, 9 in front, and the number itself).")

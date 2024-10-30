@@ -9,6 +9,8 @@ import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,27 +31,24 @@ public class ClinicService {
     }
 
     public Clinic create(ClinicDto clinicDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var professional = professionalRepository.findByCpf(userDetails.getUsername());
+
         Clinic clinic = new Clinic(clinicDto);
-        addProfessionalsToClinic(clinic, clinicDto.professionalIds());
+
+        if(professional.getClinics().isEmpty()) {
+            List<Clinic> clinics = new ArrayList<>();
+            clinics.add(clinic);
+            professional.setClinics(clinics);
+            professionalRepository.save(professional);
+
+            return clinicRepository.save(clinic);
+        }
+
+        professional.getClinics().add(clinic);
+        professionalRepository.save(professional);
+
         return clinicRepository.save(clinic);
-    }
-
-    private void addProfessionalsToClinic(Clinic clinic, List<Long> professionalIds) {
-        List<Professional> currentProfessionals = new ArrayList<>(clinic.getProfessionals());
-        for (Professional professional : currentProfessionals) {
-            clinic.removeProfessional(professional);
-            professionalRepository.save(professional);
-        }
-
-        for (Long professionalId : professionalIds) {
-            Professional professional = professionalRepository.findById(professionalId)
-                    .orElseThrow(() -> new ObjectNotFoundException(String.format("Profissional com ID: %d não foi encontrado.", professionalId)));
-
-            clinic.addProfessional(professional);
-            professionalRepository.save(professional);
-        }
-
-        clinicRepository.save(clinic);
     }
 
     public Clinic findById(Long id) {
@@ -73,11 +72,11 @@ public class ClinicService {
         clinicRepository.deleteById(clinicId);
     }
 
-    public Optional<Clinic> update(Long id, ClinicDto clinicDto, List<Long> professionalIds) {
+    public Optional<Clinic> update(Long id, ClinicDto clinicDto) {
         Optional<Clinic> optionalClinic = clinicRepository.findById(id);
         if (optionalClinic.isPresent()) {
             Clinic clinic = optionalClinic.get();
-            addProfessionalsToClinic(clinic, professionalIds);
+//            addProfessionalsToClinic(clinic, professionalIds);
 
             BeanUtils.copyProperties(clinicDto, clinic, "id");
             return Optional.of(clinicRepository.save(clinic));

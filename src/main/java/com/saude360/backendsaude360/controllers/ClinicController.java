@@ -41,7 +41,7 @@ public class ClinicController {
     @PutMapping(value = "/{id}")
     @Transactional
     public ResponseEntity<Optional<Clinic>> updateClinic(@PathVariable Long id, @RequestBody @Valid ClinicDto clinicDto) {
-        Optional<Clinic> clinicUpdated = clinicService.update(id, clinicDto, clinicDto.professionalIds());
+        Optional<Clinic> clinicUpdated = clinicService.update(id, clinicDto);
         if (clinicUpdated.isPresent() && clinicDto.address() != null) {
             addressService.update(clinicUpdated.get().getAddress().getId(), clinicDto.address());
         }

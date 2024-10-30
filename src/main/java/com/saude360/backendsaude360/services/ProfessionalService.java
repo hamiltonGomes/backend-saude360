@@ -5,6 +5,7 @@ import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
+import com.saude360.backendsaude360.utils.BCryptPassword;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -38,6 +39,7 @@ public class ProfessionalService {
 
         if (professional != null) {
             BeanUtils.copyProperties(professionalDto, professional);
+            professional.setPassword(BCryptPassword.encryptPassword(professional));
             return Optional.of(professionalRepository.save(professional));
         } else {
             throw new ObjectNotFoundException(String.format(String.format(NOT_FOUND_MESSAGE, userDetails.getUsername())));

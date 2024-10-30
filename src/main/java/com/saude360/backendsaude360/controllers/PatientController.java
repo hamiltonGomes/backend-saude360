@@ -62,10 +62,10 @@ public class PatientController {
         }
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/")
     @Transactional
-    public ResponseEntity<Optional<Patient>> updatePatient(@PathVariable Long id, @RequestBody @Valid PatientDto patientDto) {
-        Optional<Patient> patientUpdated = patientService.update(id, patientDto);
+    public ResponseEntity<Optional<Patient>> updatePatient(@RequestBody @Valid PatientDto patientDto) {
+        Optional<Patient> patientUpdated = patientService.update(patientDto);
         return ResponseEntity.ok().body(patientUpdated);
     }
 

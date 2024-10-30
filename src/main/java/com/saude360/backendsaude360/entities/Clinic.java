@@ -28,16 +28,16 @@ public class Clinic implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private String cnpj;
 
-    @Column(unique = true)
+    @Column(unique = false)
     private String phoneNumber;
 
-    @Column(unique = true)
+    @Column(unique = false)
     private String telephoneNumber;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private String cnesNumber;
 
     @OneToOne(cascade = CascadeType.ALL)

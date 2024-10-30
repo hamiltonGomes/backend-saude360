@@ -47,7 +47,7 @@ public class JWTConfig {
     };
 
     private static final String [] ENDPOINTS_PUT_PROFESSIONAL = {
-            "/user/professional/{id}",
+            "/user/professional/",
             "/transaction/{id}",
             "/professional/",
             "/consultation/{id}",
@@ -122,7 +122,7 @@ public class JWTConfig {
     };
 
     private static final String [] ENDPOINTS_PUT_PATIENT = {
-            "/user/patient/{id}"
+            "/user/patient/"
     };
 
     private static final String [] ENDPOINTS_DELETE_PATIENT = {
