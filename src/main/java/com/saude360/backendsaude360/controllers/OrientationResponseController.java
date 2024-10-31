@@ -33,7 +33,7 @@ public class OrientationResponseController {
 
     @PostMapping("/{orientationId}")
     public ResponseEntity<OrientationResponse> createResponse(@PathVariable Long orientationId,  @RequestParam("content") String content,
-                                                              @RequestParam("images") List<MultipartFile> images) throws IOException {
+                                                              @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
         OrientationResponse orientationResponse = orientationResponseService.createResponse(content, images, orientationId);
         return ResponseEntity.ok(orientationResponse);
     }

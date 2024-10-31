@@ -42,4 +42,11 @@ public class OrientationResponse {
         this.user = user;
         this.createdAt = createdAt;
     }
+
+    public OrientationResponse(String content, Orientation orientation, User user, LocalDateTime createdAt) {
+        this.content = content;
+        this.orientation = orientation;
+        this.user = user;
+        this.createdAt = createdAt;
+    }
 }

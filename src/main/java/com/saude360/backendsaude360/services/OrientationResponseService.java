@@ -46,16 +46,23 @@ public class OrientationResponseService {
 
         List<File> files = new ArrayList<>();
 
-        for (MultipartFile image : images) {
+        OrientationResponse response;
+
+        if(images != null && !images.isEmpty()) {
+            for (MultipartFile image : images) {
                 String fileName = azureService.uploadFile(image);
                 File file = new File();
                 file.setName(fileName);
                 file.setType(image.getContentType());
                 file.setSize(image.getSize());
                 files.add(file);
-        }
+            }
 
-        OrientationResponse response = new OrientationResponse(content, files, orientation, user.get(), LocalDateTime.now());
+            response = new OrientationResponse(content, files, orientation, user.get(), LocalDateTime.now());
+        }
+        else {
+            response = new OrientationResponse(content, orientation, user.get(), LocalDateTime.now());
+        }
 
         return orientationResponseRepository.save(response);
     }
