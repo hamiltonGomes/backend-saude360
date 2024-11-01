@@ -38,7 +38,11 @@ public class PatientService {
             Patient patient = optionalPatient.get();
             var oldPassword = patient.getPassword();
             BeanUtils.copyProperties(patientDto, patient, "professionals");
-            patient.setPassword(BCryptPassword.encryptPassword(patientDto.password()));
+            if (patientDto.password() == null) {
+                patient.setPassword(oldPassword);
+            } else {
+                patient.setPassword(BCryptPassword.encryptPassword(patientDto.password()));
+            }
             return Optional.of(patientRepository.save(patient));
         } else {
             throw new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, userDetails.getUsername()));
