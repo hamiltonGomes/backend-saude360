@@ -38,8 +38,13 @@ public class ProfessionalService {
         Professional professional = professionalRepository.findByCpf(userDetails.getUsername());
 
         if (professional != null) {
+            var oldPassword = professional.getPassword();
             BeanUtils.copyProperties(professionalDto, professional);
-            professional.setPassword(BCryptPassword.encryptPassword(professional));
+            if(professionalDto.password() == null) {
+                professional.setPassword(oldPassword);
+            } else {
+                professional.setPassword(BCryptPassword.encryptPassword(professional));
+            }
             return Optional.of(professionalRepository.save(professional));
         } else {
             throw new ObjectNotFoundException(String.format(String.format(NOT_FOUND_MESSAGE, userDetails.getUsername())));
