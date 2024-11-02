@@ -6,7 +6,7 @@ public enum ConsultationStatus {
     CANCELED("Cancelada");
 
 
-    private final String value;
+    public final String value;
 
     ConsultationStatus(String value) {
         this.value = value;
