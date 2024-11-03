@@ -2,6 +2,7 @@ package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.ClinicDto;
 import com.saude360.backendsaude360.dtos.ProfessionalDto;
+import com.saude360.backendsaude360.dtos.ProfessionalUpdateDto;
 import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.entities.HealthSector;
 import com.saude360.backendsaude360.entities.users.Professional;
@@ -41,16 +42,13 @@ public class ProfessionalController {
     @Transactional
     public ResponseEntity<User> createProfessional(@RequestBody @Valid ProfessionalDto professionalDto) {
         try {
-//          Busca os setores de saúde pelo nome e adiciona na lista de setores de saúde
             List<HealthSector> healthSectors = new ArrayList<>();
             for(String h : professionalDto.healthSectorsNames()) {
                 var obj = healthSectorService.findByName(h);
                 healthSectors.add(obj);
             }
-//            Cria um novo profissional sem clínicas
             var professional = new Professional(professionalDto, healthSectors);
 
-//            Se existir clínicas, adiciona na lista de clínicas e posteriormente instancia o profissional com a(s) clínica(s)
             if(professionalDto.clinic() != null && !professionalDto.clinic().isEmpty()) {
                 List<Clinic> clinics = new ArrayList<>();
                 for(ClinicDto clinic: professionalDto.clinic()) {
@@ -77,8 +75,8 @@ public class ProfessionalController {
 
     @PutMapping(value = "/")
     @Transactional
-    public ResponseEntity<Optional<Professional>> updateProfessional(@RequestBody @Valid ProfessionalDto professionalDto) {
-        Optional<Professional> professionalUpdated = professionalService.update(professionalDto);
+    public ResponseEntity<Optional<Professional>> updateProfessional(@RequestBody @Valid ProfessionalUpdateDto professionalUpdateDto) {
+        Optional<Professional> professionalUpdated = professionalService.update(professionalUpdateDto);
 
         return ResponseEntity.ok().body(professionalUpdated);
     }

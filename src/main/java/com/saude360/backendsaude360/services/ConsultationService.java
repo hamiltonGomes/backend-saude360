@@ -82,19 +82,15 @@ public class ConsultationService {
             ConsultationStatus status = ConsultationStatus.valueOf(consultationUpdateDto.statusConsultation().toUpperCase());
             consultation.setStatusConsultation(status);
         }
-
         if (consultationUpdateDto.date() != null) {
             consultation.setDate(consultationUpdateDto.date());
         }
-
         if (consultationUpdateDto.startServiceDateAndTime() != null) {
             consultation.setStartServiceDateAndTime(consultationUpdateDto.startServiceDateAndTime());
         }
-
         if (consultationUpdateDto.endServiceDateAndTime() != null) {
             consultation.setEndServiceDateAndTime(consultationUpdateDto.endServiceDateAndTime());
         }
-
         if(consultationUpdateDto.title() != null) {
             consultation.setTitle(consultationUpdateDto.title());
         }
@@ -104,12 +100,10 @@ public class ConsultationService {
         if(consultationUpdateDto.color() != null) {
             consultation.setColor(consultationUpdateDto.color());
         }
-
         if (consultationUpdateDto.evolutionHistory() != null) {
             EvolutionHistory evolutionHistory = new EvolutionHistory(consultationUpdateDto.evolutionHistory());
             consultation.setEvolutionHistory(evolutionHistory);
         }
-
 
         consultation.setUpdatedAt(LocalDateTime.now((ZoneId.of("America/Sao_Paulo"))));
         return consultationRepository.save(consultation);
@@ -119,7 +113,6 @@ public class ConsultationService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String professionalCpf = userDetails.getUsername();
         Professional professional = professionalRepository.findByCpf(professionalCpf);
-
 
         return consultationRepository.findAllByProfessional(professional);
     }
