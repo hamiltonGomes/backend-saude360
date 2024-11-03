@@ -85,7 +85,14 @@ public class UserService {
         } while (codeExist);
 
         var passwordReset = new PasswordReset(code, user.get());
-        passwordResetRepository.save(passwordReset);
+
+        try {
+            passwordResetRepository.save(passwordReset);
+        } catch (DataIntegrityViolationException e) {
+            var oldCode = passwordResetRepository.findByUser(user.get());
+            passwordResetRepository.delete(oldCode);
+            passwordResetRepository.save(passwordReset);
+        }
 
         try {
             emailService.sendEmailForgetPassword(passwordReset);
