@@ -18,17 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Service
 @Transactional
@@ -53,10 +48,18 @@ public class OrientationService {
 
     private OrientationWithResponsesDto mapToOrientationWithResponsesDto(Orientation orientation) {
         List<OrientationResponse> responses = orientationResponseRepository.findAllByOrientationId(orientation.getId());
-        List<OrientationResponseReturnDto> orientationResponses = responses.stream().map(this::mapToOrientationResponseReturnDto).collect(Collectors.toList());
+        List<OrientationResponseReturnDto> orientationResponses = responses.stream()
+                .map(this::mapToOrientationResponseReturnDto)
+                .collect(Collectors.toList());
 
-        return new OrientationWithResponsesDto(orientation.getId(), orientation.getTitle(), orientation.getDescription(), orientationResponses);
+        return new OrientationWithResponsesDto(
+                orientation.getId(),
+                orientation.getTitle(),
+                orientation.getDescription(),
+                List.copyOf(orientationResponses)
+        );
     }
+
 
     private OrientationResponseReturnDto mapToOrientationResponseReturnDto(OrientationResponse response) {
         List<FileDto> files = new ArrayList<>();

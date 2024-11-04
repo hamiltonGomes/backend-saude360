@@ -1,7 +1,6 @@
 package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.OrientationDto;
-import com.saude360.backendsaude360.dtos.OrientationWithResponsesDto;
 import com.saude360.backendsaude360.entities.Orientation;
 import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.services.OrientationService;

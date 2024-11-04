@@ -1,9 +1,6 @@
 package com.saude360.backendsaude360.entities.users;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.saude360.backendsaude360.dtos.AddressDto;
-import com.saude360.backendsaude360.entities.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

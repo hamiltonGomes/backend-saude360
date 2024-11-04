@@ -2,7 +2,6 @@ package com.saude360.backendsaude360.services;
 
 import com.saude360.backendsaude360.data.UserDetailsSecurity;
 import com.saude360.backendsaude360.entities.users.User;
-import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.exceptions.TokenInvalidException;
 import com.saude360.backendsaude360.repositories.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

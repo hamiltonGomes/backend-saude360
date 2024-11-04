@@ -22,8 +22,6 @@ public class OrientationResponseController {
     private final OrientationService orientationService;
     private final UserService userService;
 
-    private static final String UPLOAD_DIR = "uploads/";
-
     @Autowired
     public OrientationResponseController(OrientationResponseService orientationResponseService, OrientationService orientationService, UserService userService) {
         this.orientationResponseService = orientationResponseService;
