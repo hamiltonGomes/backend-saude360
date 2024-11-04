@@ -54,11 +54,11 @@ public class EmailService {
         final String htmlContent;
         if(user instanceof Professional) {
             email.setSubject("Bem-vindo ao Saúde360 - Profissional");
-            htmlContent = templateEngine.process("professionalRegister", ctx);
+            htmlContent = templateEngine.process("email-welcome-professional", ctx);
         } else {
             email.setSubject("Bem-vindo ao Saúde360 - Paciente");
 
-            htmlContent = templateEngine.process("patientRegister", ctx);
+            htmlContent = templateEngine.process("email-welcome-patient", ctx);
         }
 
         email.setText(htmlContent, true);
@@ -82,7 +82,7 @@ public class EmailService {
 
         email.setSubject("Recuperação de senha - Saúde360");
 
-        final String htmlContent = templateEngine.process("forgetPassword", ctx);
+        final String htmlContent = templateEngine.process("email-verification-code", ctx);
 
         email.setText(htmlContent, true);
 
