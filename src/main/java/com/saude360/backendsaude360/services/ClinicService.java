@@ -1,6 +1,9 @@
 package com.saude360.backendsaude360.services;
 
+import com.saude360.backendsaude360.dtos.AddressDto;
+import com.saude360.backendsaude360.dtos.AddressUpdateDto;
 import com.saude360.backendsaude360.dtos.ClinicDto;
+import com.saude360.backendsaude360.dtos.ClinicUpdateDto;
 import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
@@ -22,33 +25,31 @@ import java.util.Optional;
 public class ClinicService {
     private final ClinicRepository clinicRepository;
     private final ProfessionalRepository professionalRepository;
+    private final AddressService addressService;
     private static final String NOT_FOUND_MESSAGE = "Clínica com ID: %d não foi encontrada.";
 
     @Autowired
-    public ClinicService(ClinicRepository clinicRepository, ProfessionalRepository professionalRepository) {
+    public ClinicService(ClinicRepository clinicRepository, ProfessionalRepository professionalRepository, AddressService addressService) {
         this.clinicRepository = clinicRepository;
         this.professionalRepository = professionalRepository;
+        this.addressService = addressService;
     }
 
     public Clinic create(ClinicDto clinicDto) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var professional = professionalRepository.findByCpf(userDetails.getUsername());
+        Professional professional = professionalRepository.findByCpf(userDetails.getUsername());
 
         Clinic clinic = new Clinic(clinicDto);
+        clinicRepository.save(clinic);
 
-        if(professional.getClinics().isEmpty()) {
-            List<Clinic> clinics = new ArrayList<>();
-            clinics.add(clinic);
-            professional.setClinics(clinics);
-            professionalRepository.save(professional);
-
-            return clinicRepository.save(clinic);
+        if (professional.getClinics().isEmpty()) {
+            professional.setClinics(new ArrayList<>());
         }
-
         professional.getClinics().add(clinic);
+
         professionalRepository.save(professional);
 
-        return clinicRepository.save(clinic);
+        return clinic;
     }
 
     public Clinic findById(Long id) {
@@ -72,16 +73,32 @@ public class ClinicService {
         clinicRepository.deleteById(clinicId);
     }
 
-    public Optional<Clinic> update(Long id, ClinicDto clinicDto) {
+    public Optional<Clinic> update(Long id, ClinicUpdateDto clinicUpdateDto) {
         Optional<Clinic> optionalClinic = clinicRepository.findById(id);
         if (optionalClinic.isPresent()) {
             Clinic clinic = optionalClinic.get();
-//            addProfessionalsToClinic(clinic, professionalIds);
+            BeanUtils.copyProperties(clinicUpdateDto, clinic, "id");
 
-            BeanUtils.copyProperties(clinicDto, clinic, "id");
+            if (clinicUpdateDto.address() != null) {
+                AddressDto addressDto = convertToAddressDto(clinicUpdateDto.address());
+                addressService.update(clinic.getAddress().getId(), addressDto);
+            }
+
             return Optional.of(clinicRepository.save(clinic));
         } else {
             throw new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, id));
         }
+    }
+
+    private AddressDto convertToAddressDto(AddressUpdateDto addressUpdateDto) {
+        return new AddressDto(
+                addressUpdateDto.cep(),
+                addressUpdateDto.state(),
+                addressUpdateDto.city(),
+                addressUpdateDto.neighborhood(),
+                addressUpdateDto.street(),
+                addressUpdateDto.number(),
+                addressUpdateDto.complement()
+        );
     }
 }

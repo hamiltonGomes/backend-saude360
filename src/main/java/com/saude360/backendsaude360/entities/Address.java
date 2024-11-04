@@ -24,19 +24,14 @@ public class Address implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String cep;
 
-    @Column(nullable = false)
     private String state;
 
-    @Column(nullable = false)
     private String city;
 
-    @Column(nullable = false)
     private String neighborhood;
 
-    @Column(nullable = false)
     private String street;
 
     private Integer number;
