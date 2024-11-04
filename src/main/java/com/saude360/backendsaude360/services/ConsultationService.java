@@ -56,24 +56,6 @@ public class ConsultationService {
         return consultationRepository.save(consultation);
     }
 
-
-    private Patient findPatientByName(String patientName, Professional professional) {
-        List<Patient> patients = professional.getPatients();
-
-        if (patients.isEmpty()) {
-            throw new ObjectNotFoundException(String.format("Paciente com o nome: %s não foi encontrado para o profissional de CPF: %s.", patientName, professional.getCpf()));
-        }
-
-        for (Patient patient : patients) {
-            if (patient.getFullName().equals(patientName)) {
-                return patient;
-            }
-        }
-
-        throw new ObjectNotFoundException(String.format("Paciente com o nome: %s não foi encontrado para o profissional de CPF: %s.", patientName, professional.getCpf()));
-    }
-
-
     public Consultation update(Long id, ConsultationUpdateDto consultationUpdateDto) {
         Consultation consultation = consultationRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format(NOT_FOUND_MESSAGE, id)));

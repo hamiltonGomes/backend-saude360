@@ -8,6 +8,10 @@ public class GeneratorRandom {
     private static final SecureRandom random = new SecureRandom();
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+    private GeneratorRandom() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static String generateCode() {
         StringBuilder sequence = new StringBuilder(SEQUENCE_LENGTH);
         for (int i = 0; i < SEQUENCE_LENGTH; i++) {

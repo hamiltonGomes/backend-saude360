@@ -11,7 +11,6 @@ import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
 import com.saude360.backendsaude360.services.PatientService;
 import com.saude360.backendsaude360.services.UserService;
-import com.saude360.backendsaude360.utils.BCryptPassword;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

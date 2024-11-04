@@ -61,7 +61,7 @@ public class Patient extends User {
         professional.addPatient(this);
     }
 
-    private String generateRandomPassword() {
+    public String generateRandomPassword() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         SecureRandom secureRandom = new SecureRandom();

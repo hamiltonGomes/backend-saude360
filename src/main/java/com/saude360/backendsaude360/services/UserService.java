@@ -25,16 +25,14 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordResetRepository passwordResetRepository;
+    private final EmailService emailService;
 
     @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    public UserService(UserRepository userRepository, PasswordResetRepository passwordResetRepository) {
+    public UserService(UserRepository userRepository, PasswordResetRepository passwordResetRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordResetRepository = passwordResetRepository;
+        this.emailService = emailService;
     }
 
     public User create(User user) {

@@ -1,6 +1,5 @@
 package com.saude360.backendsaude360.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.dtos.ConsultationDto;
@@ -25,30 +24,25 @@ public class Consultation implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private static final String TIMEZONE = "America/Sao_Paulo";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ConsultationStatus statusConsultation = ConsultationStatus.SCHEDULED;
 
-    @Column(nullable = false)
     private Instant startServiceDateAndTime;
 
-    @Column(nullable = false)
     private Instant endServiceDateAndTime;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private String color;
 
     @ManyToOne
@@ -71,13 +65,13 @@ public class Consultation implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
-        updatedAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+        createdAt = LocalDateTime.now(ZoneId.of(TIMEZONE));
+        updatedAt = LocalDateTime.now(ZoneId.of(TIMEZONE));
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+        updatedAt = LocalDateTime.now(ZoneId.of(TIMEZONE));
     }
 
     public Consultation(ConsultationDto consultationDto, Patient patient, EvolutionHistory evolutionHistory, Professional professional) {
