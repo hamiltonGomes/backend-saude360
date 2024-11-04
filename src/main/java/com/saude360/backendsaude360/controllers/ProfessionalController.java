@@ -77,7 +77,6 @@ public class ProfessionalController {
     @Transactional
     public ResponseEntity<Optional<Professional>> updateProfessional(@RequestBody @Valid ProfessionalUpdateDto professionalUpdateDto) {
         Optional<Professional> professionalUpdated = professionalService.update(professionalUpdateDto);
-
         return ResponseEntity.ok().body(professionalUpdated);
     }
 

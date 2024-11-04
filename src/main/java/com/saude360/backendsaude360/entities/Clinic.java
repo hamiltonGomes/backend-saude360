@@ -1,7 +1,6 @@
 package com.saude360.backendsaude360.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saude360.backendsaude360.dtos.ClinicDto;
 import com.saude360.backendsaude360.entities.users.Professional;
@@ -28,16 +27,12 @@ public class Clinic implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = false, nullable = false)
     private String cnpj;
 
-    @Column(unique = false)
     private String phoneNumber;
 
-    @Column(unique = false)
     private String telephoneNumber;
 
-    @Column(unique = false, nullable = false)
     private String cnesNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -55,11 +50,6 @@ public class Clinic implements Serializable {
         this.phoneNumber = clinicDto.phoneNumber();
         this.telephoneNumber = clinicDto.telephoneNumber();
         this.address = new Address(clinicDto.address());
-    }
-
-    public void addProfessional(Professional professional) {
-        this.professionals.add(professional);
-        professional.getClinics().add(this);
     }
 
     public void removeProfessional(Professional professional) {

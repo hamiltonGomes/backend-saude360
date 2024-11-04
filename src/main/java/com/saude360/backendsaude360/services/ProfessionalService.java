@@ -1,7 +1,9 @@
 package com.saude360.backendsaude360.services;
 
+import com.saude360.backendsaude360.dtos.AddressUpdateDto;
 import com.saude360.backendsaude360.dtos.ClinicUpdateDto;
 import com.saude360.backendsaude360.dtos.ProfessionalUpdateDto;
+import com.saude360.backendsaude360.entities.Address;
 import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
@@ -56,57 +58,79 @@ public class ProfessionalService {
         }
 
         if (professionalUpdateDto.clinic() != null) {
-            List<Clinic> updatedClinics = new ArrayList<>();
-
-            for (ClinicUpdateDto clinicDto : professionalUpdateDto.clinic()) {
-                Optional<Clinic> existingClinicOpt = clinicRepository.findByCnpj(clinicDto.cnpj());
-
-                if (existingClinicOpt.isPresent()) {
-                    Clinic existingClinic = existingClinicOpt.get();
-
-                    if (clinicDto.phoneNumber() != null) {
-                        existingClinic.setPhoneNumber(clinicDto.phoneNumber());
-                    }
-                    if (clinicDto.telephoneNumber() != null) {
-                        existingClinic.setTelephoneNumber(clinicDto.telephoneNumber());
-                    }
-                    if (clinicDto.cnesNumber() != null) {
-                        existingClinic.setCnesNumber(clinicDto.cnesNumber());
-                    }
-                    if (clinicDto.address() != null) {
-                        if (clinicDto.address().cep() != null) {
-                            existingClinic.getAddress().setCep(clinicDto.address().cep());
-                        }
-                        if (clinicDto.address().state() != null) {
-                            existingClinic.getAddress().setState(clinicDto.address().state());
-                        }
-                        if (clinicDto.address().city() != null) {
-                            existingClinic.getAddress().setCity(clinicDto.address().city());
-                        }
-                        if (clinicDto.address().neighborhood() != null) {
-                            existingClinic.getAddress().setNeighborhood(clinicDto.address().neighborhood());
-                        }
-                        if (clinicDto.address().street() != null) {
-                            existingClinic.getAddress().setStreet(clinicDto.address().street());
-                        }
-                        if (clinicDto.address().number() != null) {
-                            existingClinic.getAddress().setNumber(clinicDto.address().number());
-                        }
-                        if (clinicDto.address().complement() != null) {
-                            existingClinic.getAddress().setComplement(clinicDto.address().complement());
-                        }
-                    }
-
-                    updatedClinics.add(existingClinic);
-                }
-            }
-
+            List<Clinic> updatedClinics = updateClinics(professionalUpdateDto, professional.getClinics());
             professional.setClinics(updatedClinics);
         }
 
         return Optional.of(professionalRepository.save(professional));
     }
 
+    private List<Clinic> updateClinics(ProfessionalUpdateDto professionalUpdateDto, List<Clinic> existingClinics) {
+        List<Clinic> updatedClinics = new ArrayList<>(existingClinics);
+
+        for (ClinicUpdateDto clinicDto : professionalUpdateDto.clinic()) {
+            Optional<Clinic> existingClinicOpt = clinicRepository.findByCnpj(clinicDto.cnpj());
+
+            Clinic clinic;
+            if (existingClinicOpt.isPresent()) {
+                clinic = existingClinicOpt.get();
+                updateClinicFields(clinic, clinicDto);
+
+                if (!updatedClinics.contains(clinic)) {
+                    updatedClinics.add(clinic);
+                }
+            } else {
+                clinic = new Clinic();
+                BeanUtils.copyProperties(clinicDto, clinic);
+                if (clinicDto.address() != null) {
+                    clinic.setAddress(new Address());
+                    updateAddressFields(clinic.getAddress(), clinicDto.address());
+                }
+                clinicRepository.save(clinic);
+                updatedClinics.add(clinic);
+            }
+        }
+        return updatedClinics;
+    }
+
+    private void updateClinicFields(Clinic existingClinic, ClinicUpdateDto clinicDto) {
+        if (clinicDto.phoneNumber() != null) {
+            existingClinic.setPhoneNumber(clinicDto.phoneNumber());
+        }
+        if (clinicDto.telephoneNumber() != null) {
+            existingClinic.setTelephoneNumber(clinicDto.telephoneNumber());
+        }
+        if (clinicDto.cnesNumber() != null) {
+            existingClinic.setCnesNumber(clinicDto.cnesNumber());
+        }
+        if (clinicDto.address() != null) {
+            updateAddressFields(existingClinic.getAddress(), clinicDto.address());
+        }
+    }
+
+    private void updateAddressFields(Address address, AddressUpdateDto addressUpdateDto) {
+        if (addressUpdateDto.cep() != null) {
+            address.setCep(addressUpdateDto.cep());
+        }
+        if (addressUpdateDto.state() != null) {
+            address.setState(addressUpdateDto.state());
+        }
+        if (addressUpdateDto.city() != null) {
+            address.setCity(addressUpdateDto.city());
+        }
+        if (addressUpdateDto.neighborhood() != null) {
+            address.setNeighborhood(addressUpdateDto.neighborhood());
+        }
+        if (addressUpdateDto.street() != null) {
+            address.setStreet(addressUpdateDto.street());
+        }
+        if (addressUpdateDto.number() != null) {
+            address.setNumber(addressUpdateDto.number());
+        }
+        if (addressUpdateDto.complement() != null) {
+            address.setComplement(addressUpdateDto.complement());
+        }
+    }
 
     public Professional findById(Long id) {
         Optional<Professional> professional = professionalRepository.findById(id);

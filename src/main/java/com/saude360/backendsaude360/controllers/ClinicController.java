@@ -1,6 +1,7 @@
 package com.saude360.backendsaude360.controllers;
 
 import com.saude360.backendsaude360.dtos.ClinicDto;
+import com.saude360.backendsaude360.dtos.ClinicUpdateDto;
 import com.saude360.backendsaude360.entities.Clinic;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.services.*;
@@ -18,11 +19,9 @@ import java.util.Optional;
 @RequestMapping(value = "clinic")
 public class ClinicController {
     private final ClinicService clinicService;
-    private final AddressService addressService;
 
-    public ClinicController(ClinicService clinicService, AddressService addressService) {
+    public ClinicController(ClinicService clinicService) {
         this.clinicService = clinicService;
-        this.addressService = addressService;
     }
 
     @PostMapping(value = "/")
@@ -40,11 +39,8 @@ public class ClinicController {
 
     @PutMapping(value = "/{id}")
     @Transactional
-    public ResponseEntity<Optional<Clinic>> updateClinic(@PathVariable Long id, @RequestBody @Valid ClinicDto clinicDto) {
-        Optional<Clinic> clinicUpdated = clinicService.update(id, clinicDto);
-        if (clinicUpdated.isPresent() && clinicDto.address() != null) {
-            addressService.update(clinicUpdated.get().getAddress().getId(), clinicDto.address());
-        }
+    public ResponseEntity<Optional<Clinic>> updateClinic(@PathVariable Long id, @RequestBody @Valid ClinicUpdateDto clinicUpdateDto) {
+        Optional<Clinic> clinicUpdated = clinicService.update(id, clinicUpdateDto);
         return ResponseEntity.ok().body(clinicUpdated);
     }
 
