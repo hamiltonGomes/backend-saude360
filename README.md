@@ -31,7 +31,7 @@ This API is built with a robust set of technologies designed to ensure scalabili
 - **SonarCloud**: For continuous code quality and security inspection.
 
 ## Features
-## Instalation
+## Installation
 ## Usage
 ## API Endpoints & Documentation
 ## UML Diagram
