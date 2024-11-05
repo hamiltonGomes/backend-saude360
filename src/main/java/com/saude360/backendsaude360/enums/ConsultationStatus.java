@@ -5,7 +5,6 @@ public enum ConsultationStatus {
     CONCLUDED("Concluída"),
     CANCELED("Cancelada");
 
-
     public final String value;
 
     ConsultationStatus(String value) {
