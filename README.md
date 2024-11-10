@@ -1,15 +1,5 @@
 # Backend Saúde360
-[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
-
 This API is built with a robust set of technologies designed to ensure scalability, security, and efficiency in managing healthcare-related data and operations.
-
-## Table of Contents
-1. [Technologies Used](#technologies-used)
-2. [Features](#features)
-3. [Installation](#installation)
-4. [Usage](#usage)
-6. [API Endpoints & Documentation](#api-endpoints--documentation)
-5. [UML Diagram](#uml-diagram)
    
 ## Technologies Used
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
@@ -30,9 +20,13 @@ This API is built with a robust set of technologies designed to ensure scalabili
 - **Microsoft Azure**: Cloud computing service.
 - **SonarCloud**: For continuous code quality and security inspection.
 
-## Features
-## Installation
-## Usage
 ## API Endpoints & Documentation
+[Documentação da API - Apidog](https://www.apidog.com/apidoc/project-727207/)
+
 ## UML Diagram
 ![image](https://github.com/user-attachments/assets/ff608039-32fd-4aa1-9069-d640e8f0d420)
+
+## Authors
+- [@hamiltonGomes](https://github.com/hamiltonGomes)
+- [@igorcandidodev](https://github.com/igorcandidodev)
+- [@Rayhene](https://github.com/Rayhene)
