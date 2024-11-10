@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -31,6 +32,10 @@ public class JWTConfig {
 
     @Value("${frontend.url}")
     private String frontendUrl;
+
+    @Value("${frontend.url.local}")
+    private String frontendUrlLocal;
+
 
     public JWTConfig(JWTAuthenticationFilter filter, CustomAccessDeniedHandler accessDeniedHandler) {
         this.filter = filter;
@@ -162,7 +167,7 @@ public class JWTConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(frontendUrl));
+        configuration.setAllowedOrigins(Arrays.asList(frontendUrl, frontendUrlLocal));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
