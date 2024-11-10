@@ -23,7 +23,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,20 +42,20 @@ public class OrientationService {
 
     public List<OrientationWithResponsesDto> findAllWithResponsesByPatientId(Long patientId) {
         List<Orientation> orientations = orientationRepository.findAllByPatientId(patientId);
-        return orientations.stream().map(this::mapToOrientationWithResponsesDto).collect(Collectors.toList());
+        return orientations.stream().map(this::mapToOrientationWithResponsesDto).toList();
     }
 
     private OrientationWithResponsesDto mapToOrientationWithResponsesDto(Orientation orientation) {
         List<OrientationResponse> responses = orientationResponseRepository.findAllByOrientationId(orientation.getId());
         List<OrientationResponseReturnDto> orientationResponses = responses.stream()
                 .map(this::mapToOrientationResponseReturnDto)
-                .collect(Collectors.toList());
+                .toList();
 
         return new OrientationWithResponsesDto(
                 orientation.getId(),
                 orientation.getTitle(),
                 orientation.getDescription(),
-                List.copyOf(orientationResponses)
+                orientationResponses
         );
     }
 

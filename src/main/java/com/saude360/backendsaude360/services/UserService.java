@@ -28,6 +28,12 @@ public class UserService {
     private final PasswordResetRepository passwordResetRepository;
     private final EmailService emailService;
 
+    private static final String USER_NOT_FOUND_MSG = "Usuário com ID: %d não foi encontrado.";
+    private static final String USER_CPF_NOT_FOUND_MSG = "Usuário com cpf: %s não foi encontrado.";
+    private static final String USER_CPF_RESET_NOT_FOUND_MSG = "Usuário com CPF: %s não foi encontrado.";
+    private static final String PASSWORD_RESET_INVALID_CODE_MSG = "Código de recuperação de senha inválido.";
+    private static final String PASSWORD_RESET_EXPIRED_CODE_MSG = "Código de recuperação de senha expirado.";
+
     @Autowired
     public UserService(UserRepository userRepository, PasswordResetRepository passwordResetRepository, EmailService emailService) {
         this.userRepository = userRepository;
@@ -36,7 +42,7 @@ public class UserService {
     }
 
     public User create(User user) {
-        var obj =  userRepository.save(user);
+        var obj = userRepository.save(user);
 
         try {
             emailService.sendEmailRegister(obj);
@@ -49,7 +55,7 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new ObjectNotFoundException("Usuário com ID: " + id + " não foi encontrado."));
+        return user.orElseThrow(() -> new ObjectNotFoundException(String.format(USER_NOT_FOUND_MSG, id)));
     }
 
     public List<User> findAll() {
@@ -60,7 +66,7 @@ public class UserService {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ObjectNotFoundException("Usuário com ID: " + id + " não foi encontrado.");
+            throw new ObjectNotFoundException(String.format(USER_NOT_FOUND_MSG, id));
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -69,7 +75,7 @@ public class UserService {
     public void forgetPassword(String cpf) {
         var user = userRepository.findByCpf(cpf);
         if (user.isEmpty()) {
-            throw new ObjectNotFoundException("Usuário com cpf: " + cpf + " não foi encontrado.");
+            throw new ObjectNotFoundException(String.format(USER_CPF_NOT_FOUND_MSG, cpf));
         }
         String code = GeneratorRandom.generateCode();
 
@@ -103,11 +109,11 @@ public class UserService {
     public void resetPassowrd(ResetPasswordDto resetPasswordDto) {
         var passwordReset = passwordResetRepository.findByCode(resetPasswordDto.code());
         if (passwordReset == null) {
-            throw new ResetPasswordInvalidException("Código de recuperação de senha inválido.");
+            throw new ResetPasswordInvalidException(PASSWORD_RESET_INVALID_CODE_MSG);
         }
         Date now = new Date();
-        if(passwordReset.isExpired(now)) {
-            throw new ResetPasswordInvalidException("Código de recuperação de senha expirado.");
+        if (passwordReset.isExpired(now)) {
+            throw new ResetPasswordInvalidException(PASSWORD_RESET_EXPIRED_CODE_MSG);
         }
         var user = passwordReset.getUser();
         user.setPassword(BCryptPassword.encryptPassword(resetPasswordDto.password()));
@@ -117,6 +123,6 @@ public class UserService {
     }
 
     public User findByCpf(String cpf) {
-        return userRepository.findByCpf(cpf).orElseThrow(() -> new ObjectNotFoundException("Usuário com CPF: " + cpf + " não foi encontrado."));
+        return userRepository.findByCpf(cpf).orElseThrow(() -> new ObjectNotFoundException(String.format(USER_CPF_RESET_NOT_FOUND_MSG, cpf)));
     }
 }

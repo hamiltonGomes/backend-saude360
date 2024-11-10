@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.saude360.backendsaude360.data.UserDetailsSecurity;
+import com.saude360.backendsaude360.exceptions.TokenGenerationException;
 import com.saude360.backendsaude360.exceptions.TokenInvalidException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,14 @@ public class JWTToken {
         try {
             var algorithm = Algorithm.HMAC256(secret);
 
-            var token = JWT.create()
+            return JWT.create()
                     .withIssuer("api-saude360")
                     .withSubject(user.getUsername())
                     .withExpiresAt(getTokenExpiration())
                     .sign(algorithm);
 
-            return token;
-
         } catch (JWTCreationException e) {
-            throw new RuntimeException("Error generating the token ", e);
+            throw new TokenGenerationException("Error generating the token", e);
         }
 
     }
