@@ -39,3 +39,4 @@ spring.mail.test-connection=false
 mail.from.name=
 
 frontend.url=https://saude360-front.vercel.app
+frontend.url.local=http://localhost:5173
