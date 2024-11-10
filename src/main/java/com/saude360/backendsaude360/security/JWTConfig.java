@@ -3,7 +3,6 @@ package com.saude360.backendsaude360.security;
 
 import com.saude360.backendsaude360.security.exceptionhandler.CustomAccessDeniedHandler;
 import com.saude360.backendsaude360.security.exceptionhandler.UnauthorizedHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,11 +26,13 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class JWTConfig {
 
-    @Autowired
-    private JWTAuthenticationFilter filter;
+    private final JWTAuthenticationFilter filter;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
+    public JWTConfig(JWTAuthenticationFilter filter, CustomAccessDeniedHandler accessDeniedHandler) {
+        this.filter = filter;
+        this.accessDeniedHandler = accessDeniedHandler;
+    }
 
     private static final String [] ENDPOINTS_POST_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/users/login",
@@ -54,7 +55,7 @@ public class JWTConfig {
             "/clinic/{id}"
     };
 
-    public static final String [] ENDPOINTS_GET_PROFESSIONAL = {
+    protected static final String [] ENDPOINTS_GET_PROFESSIONAL = {
             "/transaction/",
             "/transaction/{id}",
             "/user/patient/professional",
@@ -64,7 +65,7 @@ public class JWTConfig {
             "/consultation/patient/{patientId}"
     };
 
-    public static final String [] ENDPOINTS_DELETE_PROFESSIONAL = {
+    protected static final String [] ENDPOINTS_DELETE_PROFESSIONAL = {
             "/transaction/{id}",
             "/user/professional/{id}",
             "/orientation/{id}",
@@ -72,7 +73,7 @@ public class JWTConfig {
             "/clinic/{id}"
     };
 
-    public static final String [] ENDPOINTS_POST_PROFESSIONAL = {
+    protected static final String [] ENDPOINTS_POST_PROFESSIONAL = {
             "/transaction/",
             "/user/professional/",
             "/user/patient/",
@@ -82,7 +83,7 @@ public class JWTConfig {
             "/clinic/"
     };
 
-    public static final String [] ENDPOINTS_GET_USER = {
+    protected static final String [] ENDPOINTS_GET_USER = {
             "/user/",
             "/user/{id}",
             "/user/{cpf}",
@@ -101,15 +102,15 @@ public class JWTConfig {
             "/clinic/{id}",
     };
 
-    public static final String [] ENDPOINTS_POST_USER = {
+    protected static final String [] ENDPOINTS_POST_USER = {
             "/orientation-responses/{orientationId}",
     };
 
-    public static final String [] ENDPOINTS_PUT_USER = {
+    protected static final String [] ENDPOINTS_PUT_USER = {
             ""
     };
 
-    public static final String [] ENDPOINTS_DELETE_USER = {
+    protected static final String [] ENDPOINTS_DELETE_USER = {
             ""
     };
 
@@ -117,16 +118,8 @@ public class JWTConfig {
             "/consultation/patient/"
     };
 
-    private static final String [] ENDPOINT_POST_PATIENT = {
-            ""
-    };
-
     private static final String [] ENDPOINTS_PUT_PATIENT = {
             "/user/patient/"
-    };
-
-    private static final String [] ENDPOINTS_DELETE_PATIENT = {
-            ""
     };
 
     @Bean
@@ -140,8 +133,6 @@ public class JWTConfig {
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PATIENT).hasRole("PATIENT")
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_PATIENT).hasRole("PATIENT")
-//                        .requestMatchers(HttpMethod.POST, ENDPOINT_POST_PATIENT).hasRole("PATIENT")
-//                        .requestMatchers(HttpMethod.DELETE, ENDPOINTS_DELETE_PATIENT).hasRole("PATIENT")
                         .requestMatchers(HttpMethod.DELETE, ENDPOINTS_DELETE_PROFESSIONAL).hasRole("PROFESSIONAL")
                         .requestMatchers(HttpMethod.PUT, ENDPOINTS_PUT_PROFESSIONAL).hasRole("PROFESSIONAL")
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_GET_PROFESSIONAL).hasRole("PROFESSIONAL")
@@ -151,7 +142,7 @@ public class JWTConfig {
                         .anyRequest()
                         .denyAll())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((exception) -> exception
+                .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new UnauthorizedHandler())
                         .accessDeniedHandler(accessDeniedHandler))
                 .build();
@@ -165,8 +156,7 @@ public class JWTConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("https://saude360-front.vercel.app/"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

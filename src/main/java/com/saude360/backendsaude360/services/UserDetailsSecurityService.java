@@ -4,7 +4,6 @@ import com.saude360.backendsaude360.data.UserDetailsSecurity;
 import com.saude360.backendsaude360.entities.users.User;
 import com.saude360.backendsaude360.exceptions.TokenInvalidException;
 import com.saude360.backendsaude360.repositories.users.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +14,11 @@ import java.util.Optional;
 @Component
 public class UserDetailsSecurityService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserDetailsSecurityService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
