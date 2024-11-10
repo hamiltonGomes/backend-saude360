@@ -131,7 +131,10 @@ public class JWTConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .cors(csrf -> Customizer.withDefaults())
+                .cors(cors -> {
+                    CorsConfigurationSource source = corsConfigurationSource();
+                    cors.configurationSource(source);
+                })
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
