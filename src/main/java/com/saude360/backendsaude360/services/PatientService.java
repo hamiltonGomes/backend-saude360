@@ -6,6 +6,7 @@ import com.saude360.backendsaude360.entities.users.Patient;
 import com.saude360.backendsaude360.exceptions.DatabaseException;
 import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.repositories.users.PatientRepository;
+import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
 import com.saude360.backendsaude360.utils.BCryptPassword;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,13 @@ import java.util.Optional;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final ProfessionalRepository professionalRepository;
     private static final String NOT_FOUND_MESSAGE = "Paciente com cpf %s não foi encontrado.F";
 
     @Autowired
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, ProfessionalRepository professionalRepository) {
         this.patientRepository = patientRepository;
+        this.professionalRepository = professionalRepository;
     }
 
     public Optional<Patient> update(PatientDto patientDto) {
@@ -55,7 +58,9 @@ public class PatientService {
     }
 
     public List<Patient> findAll() {
-        return patientRepository.findAll();
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var professional = professionalRepository.findByCpf(userDetails.getUsername());
+        return patientRepository.findAllByProfessionals(professional);
     }
 
     public void delete(Long id) {
