@@ -37,3 +37,5 @@ spring.mail.properties.mail.smtp.from=
 spring.mail.default-encoding=UTF-8
 spring.mail.test-connection=false
 mail.from.name=
+
+frontend.url=https://saude360-front.vercel.app
