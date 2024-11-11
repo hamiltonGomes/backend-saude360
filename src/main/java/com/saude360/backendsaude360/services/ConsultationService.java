@@ -12,12 +12,14 @@ import com.saude360.backendsaude360.exceptions.ObjectNotFoundException;
 import com.saude360.backendsaude360.repositories.ConsultationRepository;
 import com.saude360.backendsaude360.repositories.users.PatientRepository;
 import com.saude360.backendsaude360.repositories.users.ProfessionalRepository;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -28,13 +30,15 @@ public class ConsultationService {
     private final ConsultationRepository consultationRepository;
     private final ProfessionalRepository professionalRepository;
     private final PatientRepository patientRepository;
+    private final EmailService emailService;
     private static final String NOT_FOUND_MESSAGE = "Consulta com ID: %d não foi encontrada.";
 
     @Autowired
-    public ConsultationService(ConsultationRepository consultationRepository, ProfessionalRepository professionalRepository, PatientRepository patientRepository) {
+    public ConsultationService(ConsultationRepository consultationRepository, ProfessionalRepository professionalRepository, PatientRepository patientRepository, EmailService emailService) {
         this.consultationRepository = consultationRepository;
         this.professionalRepository = professionalRepository;
         this.patientRepository = patientRepository;
+        this.emailService = emailService;
     }
 
     public Consultation create(ConsultationDto consultationDto, Long id) {
@@ -44,6 +48,12 @@ public class ConsultationService {
         var patient = patientRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Paciente com o ID " + id + " não foi encontrado."));
 
         Consultation consultation = new Consultation(consultationDto, patient, professional);
+
+        try {
+            emailService.sendEmailAppointmentConfirmation(consultation);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+//
+        }
 
         return consultationRepository.save(consultation);
     }

@@ -1,5 +1,6 @@
 package com.saude360.backendsaude360.services;
 
+import com.saude360.backendsaude360.entities.Consultation;
 import com.saude360.backendsaude360.entities.PasswordReset;
 import com.saude360.backendsaude360.entities.users.Professional;
 import com.saude360.backendsaude360.entities.users.User;
@@ -16,6 +17,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class EmailService {
@@ -83,6 +87,44 @@ public class EmailService {
         email.setSubject("Recuperação de senha - Saúde360");
 
         final String htmlContent = templateEngine.process("email-verification-code", ctx);
+
+        email.setText(htmlContent, true);
+
+        javaMailSender.send(mimeMessage);
+    }
+
+    public void sendEmailAppointmentConfirmation(Consultation consultation) throws MessagingException, UnsupportedEncodingException {
+
+        final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        final MimeMessageHelper email = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        email.setTo(consultation.getPatient().getEmail());
+
+        email.setFrom(new InternetAddress(from, fromName));
+
+        final Context ctx = new Context(LocaleContextHolder.getLocale());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
+        String formattedDate = consultation.getDate().format(formatter);
+
+        LocalDateTime startTime = LocalDateTime.ofInstant(consultation.getStartServiceDateAndTime(), ZoneId.systemDefault());
+        LocalDateTime endTime = LocalDateTime.ofInstant(consultation.getEndServiceDateAndTime(), ZoneId.systemDefault());
+        String formatedTimeStart = startTime.format(formatterTime);
+        String formatedTimeEnd = endTime.format(formatterTime);
+
+        String address = (consultation.getProfessional().getClinics() != null &&  !consultation.getProfessional().getClinics().isEmpty()) ? consultation.getProfessional().getClinics().getFirst().getAddress().toString() : "";
+
+        ctx.setVariable("name", consultation.getPatient().getFullName());
+        ctx.setVariable("data", String.format("%s", formattedDate));
+        ctx.setVariable("horaInicio", formatedTimeStart);
+        ctx.setVariable("horaFim", formatedTimeEnd);
+        ctx.setVariable("nomeProfissional", consultation.getProfessional().getFullName());
+        ctx.setVariable("endereco", address);
+
+        email.setSubject("Agendamento de consulta - Saúde360");
+
+        final String htmlContent = templateEngine.process("email-appointment-confirmation", ctx);
 
         email.setText(htmlContent, true);
 
