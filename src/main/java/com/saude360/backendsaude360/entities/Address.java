@@ -55,4 +55,9 @@ public class Address implements Serializable {
         this.number = addressDto.number();
         this.complement = addressDto.complement();
     }
+
+    @Override
+    public String toString() {
+        return street + ", " + number + " - " + neighborhood + ", " + city + " - " + state + " - " + cep;
+    }
 }
