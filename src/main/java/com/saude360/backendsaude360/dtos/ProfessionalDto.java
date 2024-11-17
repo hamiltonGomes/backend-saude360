@@ -19,8 +19,8 @@ public record ProfessionalDto(
         @Pattern(regexp = "^\\(\\d{2}\\)9\\d{4}-\\d{4}$", message = "O número de telefone deve ser nesse formato: " +
                 "(dd)9xxxx-xxxx (Números somente).")
         String phoneNumber,
-        @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)[0-9A-Za-z]{1,16}$",
-                message = "The string must contain exactly 16 alphanumeric characters with at least one uppercase letter.")
+        @Pattern(regexp = "^[\\s\\S]{1,16}$",
+                message = "A string deve conter entre 1 e 16 caracteres.")
         String password,
         String idProfilePicture,
         @NotBlank
