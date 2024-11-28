@@ -45,7 +45,10 @@ public class TransactionService {
     }
 
     public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Professional professional = professionalRepository.findByCpf(userDetails.getUsername());
+
+        return transactionRepository.findAllByProfessional(professional);
     }
 
     public Optional<Transaction> update(Long id, TransactionDto transactionDto) {
